@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "424374615701",
+    "project_id": "cuet-e-classroom",
+    "storage_bucket": "cuet-e-classroom.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424374615701:android:7c9d08de484baae8dca59c",
+        "android_client_info": {
+          "package_name": "com.cuetcse19.cuet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxl6ZJ6db5qiM01kqgmj4oOPn6Zirfkk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
