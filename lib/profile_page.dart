@@ -120,8 +120,41 @@ class ProfilePage extends StatelessWidget{
                 ),
               ),
             ),
+            SizedBox(height: 10),
+            Container(
+              width: 350,
+              height: 350,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromRGBO(143, 148, 251, .2),
+                        blurRadius: 20.0,
+                        offset: Offset(0, 10)
+                    )
+                  ]
+              ),
+            ),
+            SizedBox(height: 15),
 
-
+            Container(
+              width: 350,
+              height: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                      colors: [
+                        Color.fromRGBO(143, 148, 251, 1),
+                        Color.fromRGBO(143, 148, 251, .6),
+                      ]
+                  )
+              ),
+              child: Center(
+                child: Text("Signout", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              ),
+            ),
+            SizedBox(height: 15),
           ],
 
         ),
