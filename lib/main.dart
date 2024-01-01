@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 
 import 'login_page.dart';
 import 'profile_page.dart';
+import 'signup_page.dart';
 
 
 void main() {
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'cuetEclassroom',
       debugShowCheckedModeBanner: false,
 
-      home: LoginPage(),
+      home: ProfilePage(),
     );
   }
 }

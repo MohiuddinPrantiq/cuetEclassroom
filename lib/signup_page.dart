@@ -111,6 +111,19 @@ class SignupPage extends StatelessWidget {
                               child: TextField(
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
+                                    hintText: "Phone",
+                                    hintStyle: TextStyle(color: Colors.grey[700])
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
+                              ),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
                                     hintText: "Email Address",
                                     hintStyle: TextStyle(color: Colors.grey[700])
                                 ),
