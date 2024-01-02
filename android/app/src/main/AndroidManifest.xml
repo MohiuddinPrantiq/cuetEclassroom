@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="CUET E Classroom"
+        android:label="cuet"
         android:name="${applicationName}"
-        android:icon="@mipmap/cec">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
