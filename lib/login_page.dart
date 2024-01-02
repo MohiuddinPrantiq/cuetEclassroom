@@ -3,11 +3,22 @@ import 'package:animate_do/animate_do.dart';
 
 import 'signup_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
             child: Column(
@@ -71,87 +82,114 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(30.0),
-                  child: Column(
-                    children: <Widget>[
-                      FadeInUp(duration: Duration(milliseconds: 1800), child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color.fromRGBO(143, 148, 251, .2),
-                                  blurRadius: 20.0,
-                                  offset: Offset(0, 10)
-                              )
-                            ]
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Email Address",
-                                    hintStyle: TextStyle(color: Colors.grey[700])
-                                ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              child: TextField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey[700])
-                                ),
+                            labelText: 'Email Address',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your email address';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: !_isPasswordVisible,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
                               ),
-                            )
-                          ],
+                            ),
+                            labelText: 'Password',
+                            labelStyle: TextStyle(color: Colors.white),
+                            suffixIcon: IconButton(
+                              icon: Icon(_isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
                         ),
-                      )),
-                      SizedBox(height: 30,),
-                      FadeInUp(duration: Duration(milliseconds: 1900), child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: LinearGradient(
-                                colors: [
-                                  Color.fromRGBO(143, 148, 251, 1),
-                                  Color.fromRGBO(143, 148, 251, .6),
-                                ]
-                            )
+                        SizedBox(height: 24.0),
+                        Container(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                fixedSize: Size.fromHeight(50),
+                                backgroundColor: Color.fromRGBO(143, 148, 251, 1),// Adjust the height as needed
+                                shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              ),
+                            ),
+                            onPressed: _submitForm,
+                            child: Text(
+                              'Login',
+                              style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
+                            ),
+                          ),
                         ),
-                        child: Center(
-                          child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                        ),
-                      )),
-                      SizedBox(height: 70,),
-                      GestureDetector(
-                        onTap: () {
-                        // Implement your "Forgot Password?" action
-                          print('signin is tapped');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignupPage()),
-                          );
-                        },
-                        child: FadeInUp(duration: Duration(milliseconds: 2000), child: Text("Create Account!", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),)),
-                      ),
-                    ],
+                        SizedBox(height: 70,),
+                        GestureDetector(
+                          onTap: () {
+                            // Implement your "Forgot Password?" action
+                            print('signin is tapped');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SignupPage()),
+                            );
+                          },
+                          child: FadeInUp(duration: Duration(milliseconds: 2000), child: Text("Create Account!", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),)),
+                        )
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
         )
     );
   }
+
+  void _submitForm() {
+    if (_formKey.currentState?.validate() ?? true) {
+      // Form is valid, handle login logic here using _emailController.text and _passwordController.text
+      // For simplicity, just print the values for now
+      print('Email: ${_emailController.text}');
+      print('Password: ${_passwordController.text}');
+    }
+  }
+
+
 }

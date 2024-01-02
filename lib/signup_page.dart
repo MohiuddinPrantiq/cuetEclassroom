@@ -3,17 +3,32 @@ import 'package:animate_do/animate_do.dart';
 
 import 'login_page.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _hallController = TextEditingController();
+  TextEditingController _sidController = TextEditingController();
+  bool _isPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
             child: Column(
               children: <Widget>[
                 Container(
-                  height: 400,
+                  height: 350,
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/background.png'),
@@ -71,113 +86,206 @@ class SignupPage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, left: 30.0, right: 30.0, bottom: 30.0),
-                  child: Column(
-                    children: <Widget>[
-                      FadeInUp(duration: Duration(milliseconds: 1800), child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color.fromRGBO(143, 148, 251, .2),
-                                  blurRadius: 20.0,
-                                  offset: Offset(0, 10)
-                              )
-                            ]
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Name",
-                                    hintStyle: TextStyle(color: Colors.grey[700])
-                                ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          controller: _nameController,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Phone",
-                                    hintStyle: TextStyle(color: Colors.grey[700])
-                                ),
+                            labelText: 'Name',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your Name';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: _phoneNumberController,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Email Address",
-                                    hintStyle: TextStyle(color: Colors.grey[700])
-                                ),
+                            labelText: 'Phone Number',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your Phone Number';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: _hallController,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              child: TextField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey[700])
-                                ),
+                            labelText: 'Hall Name',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your Hall Name';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: _sidController,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
                               ),
-                            )
-                          ],
+                            ),
+                            labelText: 'Student ID',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your Student ID';
+                            }
+                            return null;
+                          },
                         ),
-                      )),
-                      SizedBox(height: 30,),
-                      FadeInUp(duration: Duration(milliseconds: 1900), child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: LinearGradient(
-                                colors: [
-                                  Color.fromRGBO(143, 148, 251, 1),
-                                  Color.fromRGBO(143, 148, 251, .6),
-                                ]
-                            )
+                        SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
+                              ),
+                            ),
+                            labelText: 'Email Address',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your email address';
+                            }
+                            return null;
+                          },
                         ),
-                        child: Center(
-                          child: Text("Signup", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                        SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: !_isPasswordVisible,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(143, 148, 251, 1), // Set border color
+                                width: 2.0, // Set border width
+                              ),
+                            ),
+                            labelText: 'Password',
+                            labelStyle: TextStyle(color: Colors.white),
+                            suffixIcon: IconButton(
+                              icon: Icon(_isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
                         ),
-                      )),
-                      SizedBox(height: 30,),
-                      GestureDetector(
-                        onTap: () {
-                          // Implement your "Forgot Password?" action
-                          print('login is tapped');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),
-                          );
-                        },
-                        child: FadeInUp(duration: Duration(milliseconds: 2000), child: Text("Login!", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),)),
-                      ),
-                    ],
+                        SizedBox(height: 24.0),
+                        Container(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: Size.fromHeight(50),
+                              backgroundColor: Color.fromRGBO(143, 148, 251, 1),// Adjust the height as needed
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0), // Set border radius
+                              ),
+                            ),
+                            onPressed: _submitForm,
+                            child: Text(
+                              'Signup',
+                              style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 50,),
+                        GestureDetector(
+                          onTap: () {
+                            // Implement your "Forgot Password?" action
+                            print('Login is tapped');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoginPage()),
+                            );
+                          },
+                          child: FadeInUp(duration: Duration(milliseconds: 2000), child: Text("Have Account! Login", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),)),
+                        ),
+                        SizedBox(height: 30,),
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
         )
     );
   }
+
+  void _submitForm() {
+    if (_formKey.currentState?.validate() ?? true) {
+      // Form is valid, handle login logic here using _emailController.text and _passwordController.text
+      // For simplicity, just print the values for now
+      print('Name: ${_nameController.text}');
+      print('Phone: ${_phoneNumberController.text}');
+      print('Hall: ${_hallController.text}');
+      print('Student ID: ${_sidController.text}');
+      print('Email: ${_emailController.text}');
+      print('Password: ${_passwordController.text}');
+    }
+  }
+
 }

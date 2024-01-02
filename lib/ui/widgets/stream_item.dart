@@ -1,4 +1,4 @@
-import 'package:cuet/ui/views/Post_view.dart';
+import '../views/Post_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/model/subject_stream.dart';

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class ProfilePage extends StatelessWidget{
+class ProfilePage extends StatefulWidget{
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+
           children: [
             Container(
               padding: EdgeInsets.only(top:60.0),
@@ -28,7 +34,7 @@ class ProfilePage extends StatelessWidget{
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.black, // Set the color of the ring
+                            color: Colors.white, // Set the color of the ring
                             width: 6, // Set the width of the ring
                           ),
                         ),
@@ -43,125 +49,134 @@ class ProfilePage extends StatelessWidget{
                   SizedBox(height: 8),
                   Text(
                     'Mohiuddin Prantiq', // Replace with the actual name
-                    style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),
                   ),
                   SizedBox(height: 8),
                 ],
               ),
             ),
-            Container(
-              width: 350,
-
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromRGBO(143, 148, 251, .2),
-                        blurRadius: 20.0,
-                        offset: Offset(0, 10)
-                    )
-                  ]
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: [
-                  Container(
-                    width: 340,
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)),)
-                    ),
-                    child: Text(
-                      "Email : u1904103@student.cuet.ac.bd", // Replace with your email address
-                      style: TextStyle(color: Colors.grey[700], fontSize: 22),
-
-                    ),
+            Padding(
+              padding: EdgeInsets.all(10),
+                child:Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color.fromRGBO(143, 148, 251, .2),
+                            blurRadius: 20.0,
+                            offset: Offset(0, 10)
+                        )
+                      ]
                   ),
-                  Container(
-                    width: 340,
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
-                    ),
-                    child: Text(
-                      "Student ID : 1904103", // Replace with your email address
-                      style: TextStyle(color: Colors.grey[700], fontSize: 22),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
-                    ),
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)),)
+                        ),
+                        child: Text(
+                          "Email : u1904103@student.cuet.ac.bd", // Replace with your email address
+                          style: TextStyle(color: Colors.white, fontSize: 22),
+
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
+                        ),
+                        child: Text(
+                          "Student ID : 1904103", // Replace with your email address
+                          style: TextStyle(color: Colors.white, fontSize: 22),
+
+                        ),
+                      ),
+
+
+                      Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          "Phone : 01903590363", // Replace with your email address
+                          style: TextStyle(color: Colors.white, fontSize: 22),
+
+                        ),
+                      ),
+                    ],
                   ),
-
-
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Phone : 01903590363", // Replace with your email address
-                      style: TextStyle(color: Colors.grey[700], fontSize: 22),
-
-                    ),
-                  ),
-                ],
-              ),
+                ),
             ),
             SizedBox(height: 10),
             Container(
               padding: EdgeInsets.all(2.0),
               decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(0, 0, 0, 1),width: 2))
+                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(255, 255, 255, 1),width: 2))
               ),
               child: Text(
-                "Term-wise CGPA", // Replace with your email address
+                "Term-wise CGPA",
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 22,
 
                 ),
               ),
             ),
             SizedBox(height: 10),
-            Container(
-              width: 350,
-              height: 350,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromRGBO(143, 148, 251, .2),
-                        blurRadius: 20.0,
-                        offset: Offset(0, 10)
-                    )
-                  ]
+            Padding(
+              padding: EdgeInsets.all(10),
+              child:Container(
+                width: double.infinity,
+                height: 350,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color.fromRGBO(143, 148, 251, .2),
+                          blurRadius: 20.0,
+                          offset: Offset(0, 10)
+                      )
+                    ]
+                ),
               ),
             ),
             SizedBox(height: 15),
 
-            Container(
-              width: 350,
-              height: 50,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                      colors: [
-                        Color.fromRGBO(143, 148, 251, 1),
-                        Color.fromRGBO(143, 148, 251, .6),
-                      ]
-                  )
-              ),
-              child: Center(
-                child: Text("Signout", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child:Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size.fromHeight(50),
+                    backgroundColor: Color.fromRGBO(143, 148, 251, 1),// Adjust the height as needed
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0), // Set border radius
+                    ),
+                  ),
+                  onPressed: (){
+                    // apply logout functionality
+                  },
+                  child: Text(
+                    'Signout',
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
+                  ),
+                ),
               ),
             ),
+
             SizedBox(height: 15),
           ],
 
         ),
       )
 
-
     );
   }
-
 }

@@ -1,8 +1,12 @@
-import 'package:cuet/attendance_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'announcement_page.dart';
 import 'login_page.dart';
+import 'signup_page.dart';
+import 'attendance_page.dart';
+import 'profile_page.dart';
 
 import 'ui/theme/app_color.dart';
 import 'ui/views/home_view.dart';
@@ -27,7 +31,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColor.black,
         fontFamily: "Inter",
       ),
-      home: const HomeView(),
+      home:  HomeView(),
     );
   }
 }
