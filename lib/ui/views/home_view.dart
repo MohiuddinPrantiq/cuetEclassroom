@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cuet/data/home_data.dart';
 import 'package:cuet/ui/theme/app_color.dart';
+import '../../notifications_page.dart';
 import 'package:cuet/ui/views/subject_view.dart';
 import 'package:cuet/ui/widgets/app_icon_buttton.dart';
 import 'package:cuet/ui/widgets/assignment_week.dart';
@@ -219,7 +220,12 @@ class HomeView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => NotificationsPage()),
+                        );
+                      },
                     ),
                     const SizedBox(width: 12),
                     ClipRRect(
