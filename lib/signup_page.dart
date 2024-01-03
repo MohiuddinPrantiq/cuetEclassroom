@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'login_page.dart';
 
@@ -18,6 +21,9 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _hallController = TextEditingController();
   TextEditingController _sidController = TextEditingController();
   bool _isPasswordVisible = false;
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +262,7 @@ class _SignupPageState extends State<SignupPage> {
                           onTap: () {
                             // Implement your "Forgot Password?" action
                             print('Login is tapped');
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => LoginPage()),
                             );
@@ -275,16 +281,50 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm() async{
     if (_formKey.currentState?.validate() ?? true) {
-      // Form is valid, handle login logic here using _emailController.text and _passwordController.text
-      // For simplicity, just print the values for now
       print('Name: ${_nameController.text}');
       print('Phone: ${_phoneNumberController.text}');
       print('Hall: ${_hallController.text}');
       print('Student ID: ${_sidController.text}');
       print('Email: ${_emailController.text}');
       print('Password: ${_passwordController.text}');
+
+      String name = _nameController.text.trim();
+      String phone = _phoneNumberController.text.trim();
+      String hall = _hallController.text.trim();
+      String sid = _sidController.text.trim();
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+
+      if(name=="" || phone=="" || hall=="" || sid=="" || email=="" || password==""){
+        print("please fill all the details");
+      } else{
+        try{
+          UserCredential userCredential = await FirebaseAuth.instance.
+          createUserWithEmailAndPassword(email: email, password: password);
+
+          Map<String, dynamic> newUser={
+            "name" : name,
+            "phone" : phone,
+            "hall" : hall,
+            "sid" : sid,
+            "email" : email,
+          };
+
+          await FirebaseFirestore.instance.collection('users').
+          doc(userCredential.user!.uid).set(newUser);
+
+          print("user created and info is stored");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()), // Replace LoginPage with your actual login page
+          );
+        } on FirebaseAuthException catch (ex){
+          print(ex.code.toString()); // good to create a snackbar
+        }
+
+      }
     }
   }
 

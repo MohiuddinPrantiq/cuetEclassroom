@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'signup_page.dart';
+import 'ui/views/home_view.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -164,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {
                             // Implement your "Forgot Password?" action
                             print('signin is tapped');
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => SignupPage()),
                             );
@@ -182,12 +186,34 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState?.validate() ?? true) {
       // Form is valid, handle login logic here using _emailController.text and _passwordController.text
       // For simplicity, just print the values for now
       print('Email: ${_emailController.text}');
       print('Password: ${_passwordController.text}');
+
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+
+      if(email == "" || password=="") {
+        print("please fill all the fields");
+      } else {
+        try{
+          UserCredential userCredential = await FirebaseAuth.instance.
+          signInWithEmailAndPassword(email: email, password: password);
+
+          if(userCredential.user != null){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeView()), // Replace LoginPage with your actual login page
+            );
+          }
+        } on FirebaseAuthException catch (ex){
+          print(ex.code.toString()); // good to create a snackbar
+        }
+      }
+
     }
   }
 

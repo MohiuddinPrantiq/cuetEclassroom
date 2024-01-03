@@ -43,6 +43,9 @@ dependencies:
   fl_chart: ^0.66.0
   datetime_picker_formfield: ^2.0.1
   file_picker: ^6.1.1
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
 
 dev_dependencies:
   flutter_test:
