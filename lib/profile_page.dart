@@ -1,12 +1,28 @@
+import 'package:cuet/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProfilePage extends StatefulWidget{
+  final Map<String, dynamic> userData;
+  const ProfilePage({Key? key, required this.userData}) : super(key: key);
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  late Map<String, dynamic> profileData;
+
+  @override
+  void initState() {
+    super.initState();
+    profileData = widget.userData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Mohiuddin Prantiq', // Replace with the actual name
+                    profileData["name"], // Replace with the actual name
                     style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),
                   ),
                   SizedBox(height: 8),
@@ -81,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)),)
                         ),
                         child: Text(
-                          "Email : u1904103@student.cuet.ac.bd", // Replace with your email address
+                          "Student ID : ${profileData["sid"]}", // Replace with your email address
                           style: TextStyle(color: Colors.white, fontSize: 22),
 
                         ),
@@ -93,17 +109,29 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
                         ),
                         child: Text(
-                          "Student ID : 1904103", // Replace with your email address
+                          "Phone : ${profileData["phone"]}", // Replace with your email address
                           style: TextStyle(color: Colors.white, fontSize: 22),
 
                         ),
                       ),
 
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
+                        ),
+                        child: Text(
+                          "Hall : ${profileData["hall"]}", // Replace with your email address
+                          style: TextStyle(color: Colors.white, fontSize: 22),
+
+                        ),
+                      ),
 
                       Container(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          "Phone : 01903590363", // Replace with your email address
+                          "Email : ${profileData["email"]}", // Replace with your email address
                           style: TextStyle(color: Colors.white, fontSize: 22),
 
                         ),
@@ -160,9 +188,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderRadius: BorderRadius.circular(15.0), // Set border radius
                     ),
                   ),
-                  onPressed: (){
-                    // apply logout functionality
-                  },
+                  onPressed: _handleLogout, // apply logout functionality
+
                   child: Text(
                     'Signout',
                     style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
@@ -178,5 +205,15 @@ class _ProfilePageState extends State<ProfilePage> {
       )
 
     );
+  }
+
+  void _handleLogout() async{
+    await FirebaseAuth.instance.signOut();
+    Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()), // Replace LoginPage with your actual login page
+    );
+    print('signout done');
   }
 }

@@ -9,6 +9,12 @@ import 'package:cuet/ui/widgets/assignment_week.dart';
 import 'package:cuet/ui/widgets/subject_item.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:cuet/profile_page.dart';
+
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -228,12 +234,31 @@ class HomeView extends StatelessWidget {
                       },
                     ),
                     const SizedBox(width: 12),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(360),
-                      child: Image.asset(
-                        "assets/images/user.png",
-                        width: 40,
-                        height: 40,
+                    InkWell(
+                      onTap: ()async{
+                        print('profile tapped');
+
+                        User? user = FirebaseAuth.instance.currentUser;
+                        try{
+                          DocumentSnapshot userDoc = await FirebaseFirestore.instance.
+                          collection('users').doc(user?.uid).get();
+                          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProfilePage(userData:userData)),
+                          );
+                        } on FirebaseAuthException catch (ex) {
+                          print(ex.code.toString());
+                        }
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(360),
+                        child: Image.asset(
+                          "assets/images/user.png",
+                          width: 32,
+                          height: 32,
+                        ),
                       ),
                     ),
                   ],
