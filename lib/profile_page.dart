@@ -26,53 +26,53 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+        body: SingleChildScrollView(
+          child: Column(
 
-          children: [
-            Container(
-              padding: EdgeInsets.only(top:60.0),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Profile picture
-                      CircleAvatar(
-                        radius: 80,
-                        backgroundImage: AssetImage('assets/images/defaultUser.png'),
-                      ),
-                      // Ring around the profile picture
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white, // Set the color of the ring
-                            width: 6, // Set the width of the ring
+            children: [
+              Container(
+                padding: EdgeInsets.only(top:60.0),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Profile picture
+                        CircleAvatar(
+                          radius: 80,
+                          backgroundImage: AssetImage('assets/images/defaultUser.png'),
+                        ),
+                        // Ring around the profile picture
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white, // Set the color of the ring
+                              width: 6, // Set the width of the ring
+                            ),
+                          ),
+                          padding: EdgeInsets.all(5), // Adjust padding as needed
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundColor: Colors.transparent, // Make the inner circle transparent
                           ),
                         ),
-                        padding: EdgeInsets.all(5), // Adjust padding as needed
-                        child: CircleAvatar(
-                          radius: 80,
-                          backgroundColor: Colors.transparent, // Make the inner circle transparent
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    profileData["name"], // Replace with the actual name
-                    style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),
-                  ),
-                  SizedBox(height: 8),
-                ],
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      profileData["name"], // Replace with the actual name
+                      style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
+              Padding(
+                padding: EdgeInsets.all(10),
                 child:Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)),)
                         ),
                         child: Text(
-                          "Student ID : ${profileData["sid"]}", // Replace with your email address
+                          profileData["type"] == "student" ? "Student ID : ${profileData["sid"]}" : "Designation : ${profileData["designation"]}",
                           style: TextStyle(color: Colors.white, fontSize: 22),
 
                         ),
@@ -109,7 +109,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
                         ),
                         child: Text(
-                          "Phone : ${profileData["phone"]}", // Replace with your email address
+                          profileData["type"] == "student" ? "Phone : ${profileData["phone"]}" : "Department : ${profileData["department"]}",
+
                           style: TextStyle(color: Colors.white, fontSize: 22),
 
                         ),
@@ -122,7 +123,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
                         ),
                         child: Text(
-                          "Hall : ${profileData["hall"]}", // Replace with your email address
+                          profileData["type"] == "student" ? "Hall : ${profileData["hall"]}" : "phone : ${profileData["phone"]}",
+
                           style: TextStyle(color: Colors.white, fontSize: 22),
 
                         ),
@@ -139,70 +141,70 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color:  Color.fromRGBO(255, 255, 255, 1),width: 2))
               ),
-              child: Text(
-                "Term-wise CGPA",
-                style: TextStyle(
+              SizedBox(height: 10),
+              profileData["type"] == "student" ? Container(
+                padding: EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color:  Color.fromRGBO(255, 255, 255, 1),width: 2))
+                ),
+                child: Text(
+                  "Term-wise CGPA",
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 22,
 
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child:Container(
-                width: double.infinity,
-                height: 350,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Color.fromRGBO(143, 148, 251, .2),
-                          blurRadius: 20.0,
-                          offset: Offset(0, 10)
-                      )
-                    ]
+              ) : SizedBox(height: 0.1),
+              SizedBox(height: 10),
+              profileData["type"] == "student" ? Padding(
+                padding: EdgeInsets.all(10),
+                child:Container(
+                  width: double.infinity,
+                  height: 350,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color.fromRGBO(143, 148, 251, .2),
+                            blurRadius: 20.0,
+                            offset: Offset(0, 10)
+                        )
+                      ]
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 15),
+              ) : SizedBox(height: 0.1),
+              SizedBox(height: 15),
 
-            Padding(
-              padding: EdgeInsets.all(10),
-              child:Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size.fromHeight(50),
-                    backgroundColor: Color.fromRGBO(143, 148, 251, 1),// Adjust the height as needed
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0), // Set border radius
+              Padding(
+                padding: EdgeInsets.all(10),
+                child:Container(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size.fromHeight(50),
+                      backgroundColor: Color.fromRGBO(143, 148, 251, 1),// Adjust the height as needed
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0), // Set border radius
+                      ),
+                    ),
+                    onPressed: _handleLogout, // apply logout functionality
+
+                    child: Text(
+                      'Signout',
+                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
                     ),
                   ),
-                  onPressed: _handleLogout, // apply logout functionality
-
-                  child: Text(
-                    'Signout',
-                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-                  ),
                 ),
               ),
-            ),
 
-            SizedBox(height: 15),
-          ],
+              SizedBox(height: 15),
+            ],
 
-        ),
-      )
+          ),
+        )
 
     );
   }
