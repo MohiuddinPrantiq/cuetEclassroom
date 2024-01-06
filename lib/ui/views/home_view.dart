@@ -16,8 +16,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cuet/profile_page.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+class HomeView extends StatefulWidget{
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+
+  final classnameController=TextEditingController();
+  final classcodeController=TextEditingController();
+  final joinclassController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -345,6 +353,7 @@ class HomeView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TextField(
+                    controller: joinclassController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     style: const TextStyle(
@@ -462,7 +471,7 @@ class HomeView extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () {
+                    onPressed:()  {
                       // Do something & close modal
                       Navigator.of(context).pop();
                     },
@@ -504,7 +513,7 @@ class HomeView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Create Class",
+                    "Class Name",
                     style: TextStyle(
                       color: AppColor.white,
                       fontWeight: FontWeight.w600,
@@ -512,6 +521,7 @@ class HomeView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TextField(
+                    controller: classnameController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     style: const TextStyle(
@@ -543,7 +553,7 @@ class HomeView extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   const Text(
-                    "Create Class Code",
+                    "Class Code",
                     style: TextStyle(
                       color: AppColor.white,
                       fontWeight: FontWeight.w600,
@@ -551,6 +561,7 @@ class HomeView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TextField(
+                    controller: classcodeController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     style: const TextStyle(
@@ -558,7 +569,7 @@ class HomeView extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                     decoration: InputDecoration(
-                      hintText: "Class Code",
+                      hintText: "Enter Class Code",
                       hintStyle: TextStyle(
                         color: AppColor.grey.withOpacity(0.75),
                       ),
@@ -618,6 +629,19 @@ class HomeView extends StatelessWidget {
                     ),
                     onPressed: () {
                       // Do something & close modal
+                      //print(classnameController.text);
+                      //print(classcodeController.text);
+                      final user=FirebaseAuth.instance.currentUser;
+                      String? u_id;
+                      if(user?.uid!=null)u_id=user?.uid;
+                      //print(u_id);
+                      CollectionReference collRef=FirebaseFirestore.instance.collection("classroom");
+                      collRef.add({
+                        'class_name': classnameController.text,
+                        'class_code': classcodeController.text,
+                        'student':[],
+                        'teacher_id':u_id,
+                      });
                       Navigator.of(context).pop();
                     },
                   ),
