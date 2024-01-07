@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cuet/data/home_data.dart';
@@ -22,6 +24,7 @@ class HomeView extends StatefulWidget{
 }
 
 class _HomeViewState extends State<HomeView> {
+  List search_result = [];
 
   final classnameController=TextEditingController();
   final classcodeController=TextEditingController();
@@ -316,8 +319,10 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
-
   void _showJoinClassModal(BuildContext context) {
+    StreamController<String> controller = StreamController<String>();
+    Stream<String> stream = controller.stream;
+    String query;
     showBarModalBottomSheet(
       context: context,
       animationCurve: Curves.easeInOut,
@@ -471,8 +476,42 @@ class _HomeViewState extends State<HomeView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed:()  {
-                      // Do something & close modal
+                    onPressed:()  async {
+                      query = joinclassController.text.trim();
+
+                      final result = await FirebaseFirestore.instance.collection('classroom')
+                          .where('class_code', isEqualTo: query)
+                          .get();
+
+                      //get Doc_id
+                      String documentId = result.docs.first.id;
+                      print(documentId);
+
+                      //for storing the fetched data
+                      List<Map<String, dynamic>> search_res =[];
+
+                      setState(() {
+                        search_res = result.docs.map((e) => e.data()).toList();
+                      });
+
+                      //update
+                      final user=FirebaseAuth.instance.currentUser;
+                      String? u_id;
+                      if(user?.uid!=null)u_id=user?.uid;
+
+                      // adding student to  the class's students
+                      search_res[0]['student'].add(u_id.toString());
+                      List updated_student = search_res[0]['student'];
+
+                      print(updated_student);
+
+                      //updating in database
+                      var refdb = await FirebaseFirestore.instance.collection('classroom');
+                      await refdb.doc(documentId).update({
+                        'student' : FieldValue.arrayUnion(updated_student),
+                      });
+
+                      //close modal
                       Navigator.of(context).pop();
                     },
                   ),
