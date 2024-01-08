@@ -187,23 +187,18 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         children: [
                           TextSpan(
-                            text: "Morning ",
+                            text: "Google ",
                             style: TextStyle(
                               color: AppColor.white,
                               fontWeight: FontWeight.w300,
                             ),
                           ),
                           TextSpan(
-                            text: "Eko ",
+                            text: "Classroom ",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          TextSpan(
-                              text: "👋🏼",
-                              style: TextStyle(
-                                fontSize: 18,
-                              )),
                         ],
                       ),
                     ),
@@ -290,6 +285,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ],
               ),
+
               const SizedBox(height: 32),
               Expanded(
                 child: ListView.builder(
@@ -297,7 +293,6 @@ class _HomeViewState extends State<HomeView> {
                   itemCount: subjects.length,
                   itemBuilder: (ctx, index) {
                     final subject = subjects[index];
-
                     // Subject Item
                     return GestureDetector(
                       onTap: () {
@@ -319,6 +314,25 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
+  void info() async{
+    final user=FirebaseAuth.instance.currentUser;
+    String? u_id;
+    if(user?.uid!=null)u_id=user?.uid;
+    print(u_id);
+    final result = await FirebaseFirestore.instance.collection('classroom')
+        .where('student', isEqualTo: u_id)
+        .get();
+
+    for (var queryDocumentSnapshot in result.docs) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      var name = data['class_name'];
+      var phone = data['teacher_id'];
+      print(name);
+      print(phone);
+    }
+  }
+
   void _showJoinClassModal(BuildContext context) {
     StreamController<String> controller = StreamController<String>();
     Stream<String> stream = controller.stream;
