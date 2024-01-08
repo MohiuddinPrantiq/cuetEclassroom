@@ -25,13 +25,13 @@ class HomeView extends StatefulWidget{
 
 class _HomeViewState extends State<HomeView> {
   List search_result = [];
-
   final classnameController=TextEditingController();
   final classcodeController=TextEditingController();
   final joinclassController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    enrolled_class();
     return SafeArea(
       child: Scaffold(
         floatingActionButton: SpeedDial(
@@ -315,23 +315,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void info() async{
-    final user=FirebaseAuth.instance.currentUser;
-    String? u_id;
-    if(user?.uid!=null)u_id=user?.uid;
-    print(u_id);
-    final result = await FirebaseFirestore.instance.collection('classroom')
-        .where('student', isEqualTo: u_id)
-        .get();
-
-    for (var queryDocumentSnapshot in result.docs) {
-      Map<String, dynamic> data = queryDocumentSnapshot.data();
-      var name = data['class_name'];
-      var phone = data['teacher_id'];
-      print(name);
-      print(phone);
-    }
-  }
 
   void _showJoinClassModal(BuildContext context) {
     StreamController<String> controller = StreamController<String>();

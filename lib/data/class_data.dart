@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'model/student.dart';
 import 'model/subject_assignment.dart';
 import 'model/subject_stream.dart';
+
 
 final List<Student> students = [
   const Student(
