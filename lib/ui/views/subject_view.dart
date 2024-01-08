@@ -1,3 +1,4 @@
+import 'package:cuet/data/home_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/class_data.dart';
@@ -25,8 +26,10 @@ class SubjectView extends StatefulWidget {
 class _SubjectViewState extends State<SubjectView> {
   int _activeIndex = 0;
 
+
   @override
   Widget build(BuildContext context) {
+    student_list(widget.subject);
     final pageController = PageController();
     final subjectStreams =
         streams.where((item) => item.subjectId == widget.subject.id).toList();

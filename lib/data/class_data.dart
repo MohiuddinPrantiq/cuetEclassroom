@@ -4,46 +4,38 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'model/student.dart';
 import 'model/subject_assignment.dart';
 import 'model/subject_stream.dart';
+import 'model/subject.dart';
+
+final List<Student> students =[];
+Future<void> student_list(Subject subject) async {
+
+  //fetching from database
+  final result = await FirebaseFirestore.instance.collection('classroom')
+      .where('class_name', isEqualTo: subject.name).get();
+
+  Map<String, dynamic> data=result.docs[0].data();
 
 
-final List<Student> students = [
-  const Student(
-    id: 1,
-    name: "Eko Widiatmoko",
-    email: "ekowidiatmoko@gmail.com",
-    avatar: "assets/images/user.png",
-  ),
-  const Student(
-    id: 2,
-    name: "Jonah Wieldbreg",
-    email: "jonahwield@gmail.com",
-    avatar: "assets/images/student_1.png",
-  ),
-  const Student(
-    id: 3,
-    name: "Maya Silver",
-    email: "maysilv@gmail.com",
-    avatar: "assets/images/student_2.png",
-  ),
-  const Student(
-    id: 4,
-    name: "Rébecca Eugenia",
-    email: "eugeniareb@gmail.com",
-    avatar: "assets/images/student_3.png",
-  ),
-  const Student(
-    id: 5,
-    name: "Lynsey Frona",
-    email: "lynsfro@gmail.com",
-    avatar: "assets/images/student_4.png",
-  ),
-  const Student(
-    id: 6,
-    name: "Lee Hayden",
-    email: "leehayden@gmail.com",
-    avatar: "assets/images/student_5.png",
-  ),
-];
+  var cnt=1;
+  for (var st_id in data['student']) {
+    //logic for finding teach name using id
+    final ref_student = await FirebaseFirestore.instance.collection('users').doc(st_id).get();
+    Map<String, dynamic> student = ref_student.data()!;
+    String student_name = student['name'];
+    String email=student['email'];
+
+    //adding in subjects list
+    students.add(
+        Student(
+            id: cnt,
+            name: student_name,
+            email: email,
+            avatar: "assets/images/user.png",
+        )
+    );
+    cnt++;
+  }
+}
 
 final List<SubjectStream> streams = [
   SubjectStream(

@@ -13,13 +13,13 @@ Future<void> enrolled_class() async {
   final user=FirebaseAuth.instance.currentUser;
   String? u_id;
   if(user?.uid!=null)u_id=user?.uid;
-  print(u_id);
+  //print(u_id);
   
   //fetching from database
   final result = await FirebaseFirestore.instance.collection('classroom')
       .where('student', arrayContains: u_id).get();
   
-  var c_name, teacher_id;
+  var c_name, teacher_id,cnt=1;
   for (var queryDocumentSnapshot in result.docs) {
     Map<String, dynamic> data = queryDocumentSnapshot.data();
     c_name = data['class_name'];
@@ -33,7 +33,7 @@ Future<void> enrolled_class() async {
     //adding in subjects list
     subjects.add(
         Subject(
-            id: 1,
+            id: cnt,
             slug: c_name,
             name: c_name,
             desc:"Become a proficient Digital Artist",
@@ -43,8 +43,9 @@ Future<void> enrolled_class() async {
               AppColor.purpleGradientEnd]
         )
     );
-    print(c_name);
-    print(teacher_name);
+    cnt++;
+    //print(c_name);
+    //print(teacher_name);
   }
 
 }
