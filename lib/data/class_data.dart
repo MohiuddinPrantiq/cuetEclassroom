@@ -37,7 +37,37 @@ Future<void> student_list(Subject subject) async {
   }
 }
 
-final List<SubjectStream> streams = [
+final List<SubjectStream> streams = [];
+Future<void> stream_list(Subject subject) async {
+
+  print(subject.name);
+  //fetching from database
+  final result = await FirebaseFirestore.instance.collection('stream')
+      .where('class_name', isEqualTo: subject.name).get();
+
+  var Title, type,cnt=1;
+  for (var queryDocumentSnapshot in result.docs) {
+    Map<String, dynamic> data = queryDocumentSnapshot.data();
+    Title = data['title'];
+    //type = data['type'];
+    print(Title);
+
+    //adding in subjects list
+    streams.add(
+        SubjectStream(
+          id: cnt,
+          title: Title,
+          postedAt: DateTime.now().subtract(const Duration(days: 5)),
+          type: SubjectStreamType.material,
+          //type:type,
+          subjectId: 1,
+        )
+    );
+    cnt++;
+  }
+}
+
+/*final List<SubjectStream> streams = [
   SubjectStream(
     id: 1,
     title: "2D Sprite",
@@ -129,7 +159,7 @@ final List<SubjectStream> streams = [
     type: SubjectStreamType.quiz,
     subjectId: 4,
   ),
-];
+];*/
 
 final List<SubjectAssignment> assignments = [
   SubjectAssignment(

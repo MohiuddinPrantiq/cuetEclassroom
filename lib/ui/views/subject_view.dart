@@ -30,6 +30,7 @@ class _SubjectViewState extends State<SubjectView> {
   @override
   Widget build(BuildContext context) {
     student_list(widget.subject);
+    stream_list(widget.subject);
     final pageController = PageController();
     final subjectStreams =
         streams.where((item) => item.subjectId == widget.subject.id).toList();
@@ -222,6 +223,7 @@ class StreamBody extends StatelessWidget {
             itemBuilder: (ctx, index) {
               final stream = streams[index];
               // Stream item
+              print(456);
               return StreamItem(stream: stream);
             },
           ),
