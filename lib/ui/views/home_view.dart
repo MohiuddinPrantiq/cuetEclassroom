@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:cuet/data/model/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cuet/data/home_data.dart';
 import 'package:cuet/ui/theme/app_color.dart';
+import '../../data/model/subject.dart';
 import '../../notifications_page.dart';
 import 'package:cuet/ui/views/subject_view.dart';
 import 'package:cuet/ui/widgets/app_icon_buttton.dart';
@@ -29,9 +31,69 @@ class _HomeViewState extends State<HomeView> {
   final classcodeController=TextEditingController();
   final joinclassController=TextEditingController();
 
+
+  List<Subject> enrolledClasses = [];
+
+  @override
+  Future<void> _fetchEnrolledClasses() async {
+    try {
+      List<Subject> Classes = [];
+      final user=FirebaseAuth.instance.currentUser;
+      String? u_id;
+      if(user?.uid!=null)u_id=user?.uid;
+      //print(u_id);
+
+      //fetching from database
+      final result = await FirebaseFirestore.instance.collection('classroom')
+          .where('student', arrayContains: u_id).get();
+
+      var c_name, teacher_id,cnt=1;
+      for (var queryDocumentSnapshot in result.docs) {
+        Map<String, dynamic> data = queryDocumentSnapshot.data();
+        c_name = data['class_name'];
+        teacher_id = data['teacher_id'];
+
+        //logic for finding teach name using id
+        final ref_teacher = await FirebaseFirestore.instance.collection('users').doc(teacher_id).get();
+        Map<String, dynamic> teacher = ref_teacher.data()!;
+        String teacher_name = teacher['name'];
+
+        //adding in subjects list
+        Classes.add(
+            Subject(
+                id: cnt,
+                slug: c_name,
+                name: c_name,
+                desc:"Become a proficient Digital Artist",
+                lecturer: teacher_name,
+                image: "assets/images/digital_arts.png",
+                gradient: [AppColor.purpleGradientStart,
+                  AppColor.purpleGradientEnd]
+            )
+        );
+        cnt++;
+        //print(c_name);
+        //print(teacher_name);
+      }
+      setState(() {
+        enrolledClasses = Classes;
+      });
+
+      print(Classes.length);
+    } catch (error) {
+      print('Error fetching enrolled classes: $error');
+    }
+  }
+
+  void initState() {
+    super.initState();
+    _fetchEnrolledClasses();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    enrolled_class();
+
     return SafeArea(
       child: Scaffold(
         floatingActionButton: SpeedDial(
@@ -290,9 +352,9 @@ class _HomeViewState extends State<HomeView> {
               Expanded(
                 child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                  itemCount: subjects.length,
+                  itemCount: enrolledClasses.length,
                   itemBuilder: (ctx, index) {
-                    final subject = subjects[index];
+                    final subject = enrolledClasses[index];
                     // Subject Item
                     return GestureDetector(
                       onTap: () {
@@ -509,6 +571,8 @@ class _HomeViewState extends State<HomeView> {
                       });
 
                       //close modal
+
+                      _fetchEnrolledClasses();
                       Navigator.of(context).pop();
                     },
                   ),

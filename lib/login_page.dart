@@ -1,3 +1,4 @@
+import 'package:cuet/data/home_data.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -204,6 +205,8 @@ class _LoginPageState extends State<LoginPage> {
           signInWithEmailAndPassword(email: email, password: password);
 
           if(userCredential.user != null){
+            //enrolled_class();
+            print(subjects.length);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => HomeView()), // Replace LoginPage with your actual login page

@@ -1,4 +1,4 @@
-import 'dart:html';
+//import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,8 +7,8 @@ import 'model/subject.dart';
 import '../ui/theme/app_color.dart';
 
 final List<Subject> subjects = [];
-Future<void> enrolled_class() async {
-  
+void enrolled_class() async {
+  subjects.clear();
   //finding current students enrolled classes
   final user=FirebaseAuth.instance.currentUser;
   String? u_id;
@@ -47,7 +47,7 @@ Future<void> enrolled_class() async {
     //print(c_name);
     //print(teacher_name);
   }
-
+  print(subjects.length);
 }
 
   // subjects = [
