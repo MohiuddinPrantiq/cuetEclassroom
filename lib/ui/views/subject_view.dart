@@ -1,6 +1,7 @@
 import 'package:cuet/data/home_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../announcement_page.dart';
 import '../../data/class_data.dart';
 import '../../data/model/subject.dart';
 import '../../data/model/subject_assignment.dart';
@@ -50,6 +51,16 @@ class _SubjectViewState extends State<SubjectView> {
 
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Announcement_page()),
+            );
+          },
+          tooltip: 'Create Post',
+          child: Icon(Icons.add),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

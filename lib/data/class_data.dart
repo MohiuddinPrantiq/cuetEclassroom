@@ -6,9 +6,9 @@ import 'model/subject_assignment.dart';
 import 'model/subject_stream.dart';
 import 'model/subject.dart';
 
-final List<Student> students =[];
+List<Student> students =[];
 Future<void> student_list(Subject subject) async {
-
+  List<Student> sts=[];
   //fetching from database
   final result = await FirebaseFirestore.instance.collection('classroom')
       .where('class_name', isEqualTo: subject.name).get();
@@ -25,7 +25,7 @@ Future<void> student_list(Subject subject) async {
     String email=student['email'];
 
     //adding in subjects list
-    students.add(
+    sts.add(
         Student(
             id: cnt,
             name: student_name,
@@ -35,6 +35,7 @@ Future<void> student_list(Subject subject) async {
     );
     cnt++;
   }
+  students=sts;
 }
 
 final List<SubjectStream> streams = [];

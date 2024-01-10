@@ -71,7 +71,7 @@ class _MyFormState extends State<Announcement_page> {
                   SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectedType,
-                    items: ['Assignment', 'Quiz', 'Notice']
+                    items: ['Assignment', 'Quiz', 'Materials']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -97,7 +97,7 @@ class _MyFormState extends State<Announcement_page> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  DateTimeField(
+                  _selectedType == "Materials"? SizedBox(height: 0.1) : DateTimeField(
                     format: DateFormat("yyyy-MM-dd HH:mm"),
                     onShowPicker: (context, currentValue) async {
                       final date = await showDatePicker(
@@ -223,6 +223,8 @@ class _MyFormState extends State<Announcement_page> {
       print('Deadline: $_selectedDate');
       print('Description: ${_descriptionController.text}');
       print('Selected Files: $_selectedFiles');
+
+      Navigator.pop(context);
     }
   }
 }
