@@ -38,9 +38,10 @@ Future<void> student_list(Subject subject) async {
   students=sts;
 }
 
-final List<SubjectStream> streams = [];
+List<SubjectStream> streams = [];
 Future<void> stream_list(Subject subject) async {
 
+  List<SubjectStream> streamsData = [];
   print(subject.name);
   //fetching from database
   final result = await FirebaseFirestore.instance.collection('stream')
@@ -54,18 +55,21 @@ Future<void> stream_list(Subject subject) async {
     print(Title);
 
     //adding in subjects list
-    streams.add(
+    streamsData.add(
         SubjectStream(
-          id: cnt,
+
           title: Title,
           postedAt: DateTime.now().subtract(const Duration(days: 5)),
           type: SubjectStreamType.material,
           //type:type,
-          subjectId: 1,
+          subjectDescription: 'description',
         )
     );
     cnt++;
   }
+  streams=streamsData;
+  print('yes');
+  print(streams.length);
 }
 
 /*final List<SubjectStream> streams = [

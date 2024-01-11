@@ -14,6 +14,7 @@ import '../widgets/stream_item.dart';
 import '../widgets/student_item.dart';
 import '../widgets/subject_post.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SubjectView extends StatefulWidget {
   final Subject subject;
@@ -28,24 +29,118 @@ class _SubjectViewState extends State<SubjectView> {
   int _activeIndex = 0;
 
 
+  List<SubjectStream> allStreamList = [];
+  List<SubjectAssignment> allAssignment = [];
+
+  @override
+  Future<void> _fetchStreams() async {
+    try {
+      List<SubjectStream> streamsData = [];
+      print(widget.subject.name);
+      //fetching from database
+      final ref_class = await FirebaseFirestore.instance.collection('classroom')
+          .where('class_name', isEqualTo: widget.subject.name).limit(1).get();
+      List<dynamic> materials = ref_class.docs[0]['material'] as List<dynamic>;
+      for (String materialId in materials) {
+        DocumentSnapshot<Map<String, dynamic>> materialSnapshot =
+        await FirebaseFirestore.instance.collection('Material')
+            .doc(materialId)
+            .get();
+        if (materialSnapshot.exists) {
+
+          Map<String, dynamic> materialData = materialSnapshot.data()!;
+          DateTime dateTime = materialData['posted'].toDate();
+          streamsData.add(
+              SubjectStream(
+                title: materialData['title'],
+                postedAt: dateTime,
+                type: SubjectStreamType.material,
+                //type:type,
+                subjectDescription: materialData['description'],
+              )
+          );
+
+        } else {
+          print('Material document with ID  not found');
+        }
+      }
+      setState(() {
+        allStreamList = streamsData;
+      });
+      //allStreamList=streamsData;
+      print('yes-found');
+      print(allStreamList.length);
+    } catch (error) {
+      print('Error fetching enrolled classes: $error');
+    }
+  }
+
+  Future<void> _fetchAssignment() async {
+    try {
+      List<SubjectAssignment> assignmentData = [];
+      print(widget.subject.name);
+      //fetching from database
+      final ref_class = await FirebaseFirestore.instance.collection('classroom')
+          .where('class_name', isEqualTo: widget.subject.name).limit(1).get();
+      List<dynamic> assignments = ref_class.docs[0]['assignment'] as List<dynamic>;
+      for (String assignmentsId in assignments) {
+        DocumentSnapshot<Map<String, dynamic>> assignmentsSnapshot =
+        await FirebaseFirestore.instance.collection('assignment')
+            .doc(assignmentsId)
+            .get();
+        if (assignmentsSnapshot.exists) {
+
+          Map<String, dynamic> assignmentsData = assignmentsSnapshot.data()!;
+          DateTime dateTimepost = assignmentsData['posted'].toDate();
+          DateTime dateTimedue = assignmentsData['due'].toDate();
+          assignmentData.add(
+              SubjectAssignment(
+                  id: 1,
+                  title: assignmentsData['title'],
+                  description: assignmentsData['description'],
+                  postedAt: dateTimepost,
+                  dueAt: dateTimedue,
+                  subjectId: assignmentsData['subject'],
+                  type: SubjectAssignmentType.missing
+              )
+          );
+
+        } else {
+          print('Material document with ID  not found');
+        }
+      }
+      setState(() {
+        allAssignment = assignmentData;
+      });
+      //allStreamList=streamsData;
+      print('yes-found');
+      print(allAssignment.length);
+    } catch (error) {
+      print('Error fetching enrolled classes: $error');
+    }
+  }
+
+  void initState() {
+    super.initState();
+    _fetchStreams();
+    _fetchAssignment();
+  }
+
   @override
   Widget build(BuildContext context) {
     student_list(widget.subject);
     stream_list(widget.subject);
     final pageController = PageController();
-    final subjectStreams =
-        streams.where((item) => item.subjectId == widget.subject.id).toList();
+
+
     final List<Map<String, dynamic>> menus = [
       {'index': 1, 'icon': Icons.timer, 'title': "Stream"},
       {'index': 2, 'icon': Icons.assignment, 'title': "Assignment"},
       {'index': 3, 'icon': Icons.group, 'title': "Classmates"},
     ];
     final List<Widget> bodies = [
-      StreamBody(streams: subjectStreams),
-      AssignmentBody(
-          assignments: assignments
-              .where((item) => item.subjectId == widget.subject.id)
-              .toList()),
+      StreamBody(streams: allStreamList),
+      AssignmentBody(assignments: allAssignment),
       const ClassmateBody()
     ];
 
