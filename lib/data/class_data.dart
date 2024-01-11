@@ -170,7 +170,7 @@ final List<SubjectAssignment> assignments = [
     "Make a 2D sprite character using Image Manipulation tools (Photoshop, Illustrator, or else)",
     postedAt: DateTime.now().subtract(const Duration(days: 3)),
     dueAt: DateTime.now().add(const Duration(days: 5)),
-    subjectId: 1,
+    subjectId: '1',
     type: SubjectAssignmentType.turnedIn,
   ),
   SubjectAssignment(
@@ -179,7 +179,7 @@ final List<SubjectAssignment> assignments = [
     description: "Implement color & shadow theory",
     postedAt: DateTime.now().subtract(const Duration(days: 4)),
     dueAt: DateTime.now().add(const Duration(days: 9)),
-    subjectId: 1,
+    subjectId: '1',
     type: SubjectAssignmentType.missing,
   ),
   SubjectAssignment(
@@ -188,7 +188,7 @@ final List<SubjectAssignment> assignments = [
     description: "Analyze DDOS attack on attached study case",
     postedAt: DateTime.now().subtract(const Duration(days: 1)),
     dueAt: DateTime.now().add(const Duration(days: 4)),
-    subjectId: 2,
+    subjectId: '2',
     type: SubjectAssignmentType.missing,
   ),
   SubjectAssignment(
@@ -197,7 +197,7 @@ final List<SubjectAssignment> assignments = [
     description: "Analyze attached Project Budgetting as a study case",
     postedAt: DateTime.now().subtract(const Duration(days: 3)),
     dueAt: DateTime.now().add(const Duration(days: 10)),
-    subjectId: 3,
+    subjectId: '3',
     type: SubjectAssignmentType.turnedIn,
   ),
   SubjectAssignment(
@@ -206,7 +206,7 @@ final List<SubjectAssignment> assignments = [
     description: "Make a report of trending Fintech product in your country",
     postedAt: DateTime.now().subtract(const Duration(days: 2)),
     dueAt: DateTime.now().add(const Duration(days: 8)),
-    subjectId: 3,
+    subjectId: '3',
     type: SubjectAssignmentType.missing,
   ),
   SubjectAssignment(
@@ -216,7 +216,7 @@ final List<SubjectAssignment> assignments = [
     "Implement Parcelable as data that being passed to another Activty",
     postedAt: DateTime.now().subtract(const Duration(days: 2)),
     dueAt: DateTime.now().add(const Duration(days: 15)),
-    subjectId: 4,
+    subjectId: '4',
     type: SubjectAssignmentType.turnedIn,
   ),
   SubjectAssignment(
@@ -225,7 +225,7 @@ final List<SubjectAssignment> assignments = [
     description: "Implement data class in the current project",
     postedAt: DateTime.now().subtract(const Duration(days: 1)),
     dueAt: DateTime.now().add(const Duration(days: 4)),
-    subjectId: 4,
+    subjectId: '4',
     type: SubjectAssignmentType.turnedIn,
   ),
 ];

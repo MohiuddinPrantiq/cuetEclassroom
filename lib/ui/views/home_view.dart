@@ -249,15 +249,16 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         children: [
                           TextSpan(
-                            text: "Google ",
+                            text: "CUET ",
                             style: TextStyle(
                               color: AppColor.white,
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           TextSpan(
-                            text: "Classroom ",
+                            text: "E-Classroom ",
                             style: TextStyle(
+                              color: AppColor.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

@@ -9,3 +9,4 @@ class NotificationItem {
     required this.time,
   });
 }
+List<NotificationItem> notification_list = [];

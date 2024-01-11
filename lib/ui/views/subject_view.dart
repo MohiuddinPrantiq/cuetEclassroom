@@ -55,7 +55,7 @@ class _SubjectViewState extends State<SubjectView> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Announcement_page()),
+              MaterialPageRoute(builder: (context) => Announcement_page(subject: widget.subject,)),
             );
           },
           tooltip: 'Create Post',

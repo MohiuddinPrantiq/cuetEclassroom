@@ -1,12 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cuet/data/model/notification.dart';
+import 'package:cuet/data/model/subject_assignment.dart';
+import 'package:cuet/data/model/material_post.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
+import 'data/model/subject.dart';
+
 class Announcement_page extends StatefulWidget {
+
+  final Subject subject;
+  // Constructor that takes a Subject object
+  Announcement_page({Key? key, required this.subject}) : super(key: key);
+
+
+
+
+
   @override
+
   _MyFormState createState() => _MyFormState();
+
 }
+
+String? sub_id;
 
 class _MyFormState extends State<Announcement_page> {
   final _formKey = GlobalKey<FormState>();
@@ -17,8 +37,24 @@ class _MyFormState extends State<Announcement_page> {
   List<PlatformFile> _selectedFiles = [];
   final format = DateFormat("yyyy-MM-dd");
 
+
+  @override
+  Future<void> get_sub() async {
+    try {
+
+      //logic for finding class_id using name
+      final ref_class = await FirebaseFirestore.instance.collection('classroom')
+          .where('class_name', isEqualTo: widget.subject.name).limit(1).get();
+      sub_id = ref_class.docs.first.id;
+
+    } catch (error) {
+      print('Error fetching enrolled classes: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    get_sub();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -214,7 +250,7 @@ class _MyFormState extends State<Announcement_page> {
     }
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_formKey.currentState?.validate()?? true) {
       // Perform the form submission
       // You can access the form data using _titleController.text, _selectedType, _selectedDate, _descriptionController.text, and _selectedFiles
@@ -223,7 +259,80 @@ class _MyFormState extends State<Announcement_page> {
       print('Deadline: $_selectedDate');
       print('Description: ${_descriptionController.text}');
       print('Selected Files: $_selectedFiles');
+      if(_selectedType == 'Materials') {
+        MaterialPost post = MaterialPost(
+          id: 1,
+          title: _titleController.text,
+          description: _descriptionController.text,
+          postedAt: DateTime.now(),
+          subjectId: sub_id!
+        );
+        print(sub_id);
 
+        //adding in material collection
+        CollectionReference materialdb = FirebaseFirestore.instance.collection('Material');
+        DocumentReference doc_ref = await materialdb.add({
+          "title" : post.title,
+          "description" : post.description,
+          "posted" :  post.postedAt,
+          "subject" : post.subjectId,
+        });
+        List updated_post = [];
+        updated_post.add(doc_ref.id);
+
+        //updating in database
+        try {
+          var refdb = await FirebaseFirestore.instance.collection('classroom');
+          await refdb.doc(sub_id).update({
+            'material' : FieldValue.arrayUnion(updated_post),
+          });
+          print('added successfully');
+        } on FirebaseAuthException catch (ex){
+          print(ex.code.toString());
+        }
+      }
+      else {
+          SubjectAssignment post = SubjectAssignment(
+              id: 1,
+              title: _titleController.text,
+              description: _descriptionController.text,
+              postedAt: DateTime.now(),
+              dueAt: DateTime.now(),
+              subjectId: sub_id!,
+              type: SubjectAssignmentType.missing
+          );
+          print(sub_id);
+
+          //adding in material collection
+          CollectionReference assigndb = FirebaseFirestore.instance.collection('assignment');
+          DocumentReference doc_ref = await assigndb.add({
+            "title" : post.title,
+            "description" : post.description,
+            "posted" :  post.postedAt,
+            "due" : post.dueAt,
+            "subject" : post.subjectId,
+          });
+          List updated_as = [];
+          updated_as.add(doc_ref.id);
+
+          //updating in database
+          try {
+            var refdb = await FirebaseFirestore.instance.collection('classroom');
+            await refdb.doc(sub_id).update({
+              'assignment' : FieldValue.arrayUnion(updated_as),
+            });
+            print('added successfully');
+          } on FirebaseAuthException catch (ex){
+            print(ex.code.toString());
+          }
+      }
+       NotificationItem notification = NotificationItem(
+           title : _titleController.text,
+           message: _descriptionController.text,
+           time: _selectedDate.toString(),
+       );
+     notification_list.add(notification);
+     notification_list.reversed;
       Navigator.pop(context);
     }
   }

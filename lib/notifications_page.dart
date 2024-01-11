@@ -30,12 +30,12 @@ class NotificationsPage extends StatelessWidget {
         backgroundColor: AppColor.black,
       ),
       body: ListView.builder(
-        itemCount: notifications.length,
+        itemCount: notification_list.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(notifications[index].title,style: TextStyle(color: Colors.white)),
-            subtitle: Text(notifications[index].message,style: TextStyle(color: Colors.white)),
-            trailing: Text(notifications[index].time,style: TextStyle(color: Colors.white)),
+            title: Text(notification_list[index].title,style: TextStyle(color: Colors.white)),
+            subtitle: Text(notification_list[index].message,style: TextStyle(color: Colors.white)),
+            trailing: Text(notification_list[index].time,style: TextStyle(color: Colors.white)),
             onTap: () {
               print("clicked");
               // Handle notification tap
