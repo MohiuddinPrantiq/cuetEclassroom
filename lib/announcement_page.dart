@@ -269,6 +269,7 @@ class _MyFormState extends State<Announcement_page> {
       print('Deadline: $_selectedDate');
       print('Description: ${_descriptionController.text}');
       print('Selected Files: $_selectedFiles');
+
       if(_selectedType == 'Materials') {
         MaterialPost post = MaterialPost(
           id: 1,
@@ -302,6 +303,20 @@ class _MyFormState extends State<Announcement_page> {
         } on FirebaseAuthException catch (ex){
           print(ex.code.toString());
         }
+        //notification create
+        NotificationItem notification = NotificationItem(
+          title : post.title,
+          message: widget.subject.name,
+          time: Timestamp.fromDate(post.postedAt)
+        );
+
+        //adding in notification collection
+        CollectionReference notifydb = FirebaseFirestore.instance.collection('notification');
+        await notifydb.add({
+          "title" : notification.title,
+          "message" : notification.message,
+          "time" :  notification.time,
+        });
       }
       else {
           SubjectAssignment post = SubjectAssignment(
@@ -337,14 +352,23 @@ class _MyFormState extends State<Announcement_page> {
           } on FirebaseAuthException catch (ex){
             print(ex.code.toString());
           }
+          //notification create
+
+          NotificationItem notification = NotificationItem(
+            title : post.title,
+            message: widget.subject.name,
+            time: Timestamp.fromDate(post.postedAt),
+          );
+
+          //adding in notification collection
+          CollectionReference notifydb = FirebaseFirestore.instance.collection('notification');
+          await notifydb.add({
+          "title" : notification.title,
+          "message" : notification.message,
+          "time" :  notification.time,
+          });
       }
-       NotificationItem notification = NotificationItem(
-           title : _titleController.text,
-           message: _descriptionController.text,
-           time: _selectedDate.toString(),
-       );
-     notification_list.add(notification);
-     notification_list.reversed;
+
       Navigator.pop(context);
     }
   }

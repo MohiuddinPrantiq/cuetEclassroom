@@ -1,4 +1,4 @@
-# CUET E-CLASSROOM
+# CUET E-Classroom
 
 A new Flutter-Firebase project.
 

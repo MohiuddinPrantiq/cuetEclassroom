@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class NotificationItem {
   final String title;
   final String message;
-  final String time;
+  final Timestamp time;
 
   NotificationItem({
     required this.title,
@@ -9,4 +11,3 @@ class NotificationItem {
     required this.time,
   });
 }
-List<NotificationItem> notification_list = [];
