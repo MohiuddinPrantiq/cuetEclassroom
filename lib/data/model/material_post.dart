@@ -4,6 +4,7 @@ class MaterialPost {
   final String description;
   final DateTime postedAt;
   final String subjectId;
+  final String postedBy;
 
   MaterialPost({
     required this.id,
@@ -11,5 +12,6 @@ class MaterialPost {
     required this.description,
     required this.postedAt,
     required this.subjectId,
+    required this.postedBy,
   });
 }

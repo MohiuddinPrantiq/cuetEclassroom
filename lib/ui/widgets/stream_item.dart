@@ -28,6 +28,7 @@ class StreamItem extends StatelessWidget {
                 postTitle: stream.title ?? 'Default Title',
                 postContent: stream.subjectDescription ?? 'No Description',
                 postedAt: stream.postedAt,
+                postedBy: stream.postedBy,
               ), // Use the destination page widget
             ),
           );
@@ -90,7 +91,20 @@ class StreamItem extends StatelessWidget {
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
                 ),
-                onTap: () {},
+                onTap: () {
+                  // Navigate to the destination page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostView(
+                        postTitle: stream.title ?? 'Default Title',
+                        postContent: stream.subjectDescription ?? 'No Description',
+                        postedAt: stream.postedAt,
+                        postedBy: stream.postedBy,
+                      ), // Use the destination page widget
+                    ),
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: const BoxDecoration(
@@ -111,7 +125,7 @@ class StreamItem extends StatelessWidget {
                       ),
                       const SizedBox(width: 16),
                       const Text(
-                        "Add class's comment",
+                        "Click to view details and make comments!",
                         style: TextStyle(
                           color: AppColor.grey,
                           fontSize: 12,

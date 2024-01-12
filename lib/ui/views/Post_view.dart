@@ -7,6 +7,7 @@ class PostView extends StatelessWidget {
   final String postTitle;
   final String postContent;
   final DateTime postedAt;
+  final String postedBy;
 
   // Example list of comments
   final List<String> comments = [
@@ -21,6 +22,7 @@ class PostView extends StatelessWidget {
     required this.postTitle,
     required this.postContent,
     required this.postedAt,
+    required this.postedBy,
   }) : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class PostView extends StatelessWidget {
                   color: Colors.white,
                 ),
         ),
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent, // Set the background color to transparent
         elevation: 0, // Remove the shadow
        //brightness: Brightness.dark, // Set brightness to dark for white text
@@ -57,7 +60,7 @@ class PostView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Username', // Replace with actual username
+                      postedBy, // Replace with actual username
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

@@ -62,6 +62,7 @@ class _SubjectViewState extends State<SubjectView> {
                 type: materialData['title']=="Today's Attendence"?SubjectStreamType.attendance:SubjectStreamType.material,
                 //type:type,
                 subjectDescription: materialData['description'],
+                postedBy: materialData['postedBy'],
               )
           );
 

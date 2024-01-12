@@ -63,6 +63,7 @@ Future<void> stream_list(Subject subject) async {
           type: SubjectStreamType.material,
           //type:type,
           subjectDescription: 'description',
+          postedBy: 'None'
         )
     );
     cnt++;

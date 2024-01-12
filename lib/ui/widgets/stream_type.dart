@@ -12,18 +12,14 @@ class StreamType extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: (type == SubjectStreamType.material
-            ? AppColor.material
-            : AppColor.quiz)
+        color: AppColor.material
             .withOpacity(0.15),
         borderRadius: BorderRadius.circular(360),
       ),
       child: Text(
         type == SubjectStreamType.material ? "Material" : "Attendance",
         style: TextStyle(
-          color: type == SubjectStreamType.material
-              ? AppColor.material
-              : AppColor.quiz,
+          color: AppColor.material,
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),

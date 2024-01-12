@@ -6,6 +6,7 @@ class SubjectStream {
   final DateTime postedAt;
   final SubjectStreamType type;
   final String subjectDescription;
+  final String postedBy;
 
   SubjectStream({
 
@@ -13,6 +14,7 @@ class SubjectStream {
     required this.postedAt,
     required this.type,
     required this.subjectDescription,
+    required this.postedBy,
   });
 
   get content => null;

@@ -25,6 +25,9 @@ class HomeView extends StatefulWidget{
   State<HomeView> createState() => _HomeViewState();
 }
 
+String currName='none';
+String currEmail='none';
+
 class _HomeViewState extends State<HomeView> {
   List search_result = [];
   final classnameController=TextEditingController();
@@ -43,7 +46,18 @@ class _HomeViewState extends State<HomeView> {
       if(user?.uid!=null)u_id=user?.uid;
       //print(u_id);
 
+      DocumentSnapshot userDoc = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(user?.uid)
+          .get();
+      Map<String, dynamic> userData =
+      userDoc.data() as Map<String, dynamic>;
+      currEmail=userData['email'];
+      currName=userData['name'];
+
       //fetching from database
+
       final result1 = await FirebaseFirestore.instance.collection('classroom')
           .where('student', arrayContains: u_id).get();
       final result2 = await FirebaseFirestore.instance.collection('classroom')
@@ -472,12 +486,12 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          const Column(
+                           Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Eko Widiatmoko",
+                                currName,
                                 style: TextStyle(
                                   color: AppColor.white,
                                   fontSize: 16,
@@ -486,7 +500,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               SizedBox(height: 2),
                               Text(
-                                "ekowidiatmoko@gmail.com",
+                                currEmail,
                                 style: TextStyle(
                                   color: AppColor.grey,
                                   fontSize: 12,

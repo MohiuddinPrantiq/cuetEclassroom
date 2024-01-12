@@ -14,6 +14,7 @@ class Attendance extends StatefulWidget {
 }
 
 String? sub_id;
+String? posterName;
 
 class _AttendanceState extends State<Attendance> {
   List<bool> buttonStates = List.generate(200, (index) => false);
@@ -26,6 +27,16 @@ class _AttendanceState extends State<Attendance> {
       final ref_class = await FirebaseFirestore.instance.collection('classroom')
           .where('class_name', isEqualTo: widget.subject.name).limit(1).get();
       sub_id = ref_class.docs.first.id;
+
+      User? user = FirebaseAuth.instance.currentUser;
+      DocumentSnapshot userDoc = await FirebaseFirestore
+            .instance
+            .collection('users')
+            .doc(user?.uid)
+            .get();
+       Map<String, dynamic> userData =
+       userDoc.data() as Map<String, dynamic>;
+      posterName=userData['name'];
 
     } catch (error) {
       print('Error fetching enrolled classes: $error');
@@ -188,7 +199,8 @@ class _AttendanceState extends State<Attendance> {
                     title: "Today's Attendence",
                     description: todayAttendance,
                     postedAt: DateTime.now(),
-                    subjectId: sub_id!
+                    subjectId: sub_id!,
+                    postedBy: posterName!,
                 );
                 print(sub_id);
 
@@ -199,6 +211,7 @@ class _AttendanceState extends State<Attendance> {
                   "description" : post.description,
                   "posted" :  post.postedAt,
                   "subject" : post.subjectId,
+                  "postedBy" : post.postedBy,
                 });
                 List updated_post = [];
                 updated_post.add(doc_ref.id);

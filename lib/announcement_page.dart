@@ -27,6 +27,7 @@ class Announcement_page extends StatefulWidget {
 }
 
 String? sub_id;
+String? posterName;
 
 class _MyFormState extends State<Announcement_page> {
   final _formKey = GlobalKey<FormState>();
@@ -46,6 +47,15 @@ class _MyFormState extends State<Announcement_page> {
       final ref_class = await FirebaseFirestore.instance.collection('classroom')
           .where('class_name', isEqualTo: widget.subject.name).limit(1).get();
       sub_id = ref_class.docs.first.id;
+      User? user = FirebaseAuth.instance.currentUser;
+      DocumentSnapshot userDoc = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(user?.uid)
+          .get();
+      Map<String, dynamic> userData =
+      userDoc.data() as Map<String, dynamic>;
+      posterName=userData['name'];
 
     } catch (error) {
       print('Error fetching enrolled classes: $error');
@@ -265,7 +275,8 @@ class _MyFormState extends State<Announcement_page> {
           title: _titleController.text,
           description: _descriptionController.text,
           postedAt: DateTime.now(),
-          subjectId: sub_id!
+          subjectId: sub_id!,
+          postedBy: posterName!,
         );
         print(sub_id);
 
@@ -276,6 +287,7 @@ class _MyFormState extends State<Announcement_page> {
           "description" : post.description,
           "posted" :  post.postedAt,
           "subject" : post.subjectId,
+          "postedBy" : post.postedBy,
         });
         List updated_post = [];
         updated_post.add(doc_ref.id);
