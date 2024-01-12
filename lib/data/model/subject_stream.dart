@@ -1,4 +1,4 @@
-enum SubjectStreamType { material, quiz }
+enum SubjectStreamType { material, attendance }
 
 class SubjectStream {
 

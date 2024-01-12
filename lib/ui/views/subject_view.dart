@@ -2,6 +2,7 @@ import 'package:cuet/data/home_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../announcement_page.dart';
+import '../../attendance_page.dart';
 import '../../data/class_data.dart';
 import '../../data/model/subject.dart';
 import '../../data/model/subject_assignment.dart';
@@ -14,6 +15,9 @@ import '../widgets/stream_item.dart';
 import '../widgets/student_item.dart';
 import '../widgets/subject_post.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SubjectView extends StatefulWidget {
@@ -31,6 +35,7 @@ class _SubjectViewState extends State<SubjectView> {
 
   List<SubjectStream> allStreamList = [];
   List<SubjectAssignment> allAssignment = [];
+  String userType='student';
 
   @override
   Future<void> _fetchStreams() async {
@@ -54,7 +59,7 @@ class _SubjectViewState extends State<SubjectView> {
               SubjectStream(
                 title: materialData['title'],
                 postedAt: dateTime,
-                type: SubjectStreamType.material,
+                type: materialData['title']=="Today's Attendence"?SubjectStreamType.attendance:SubjectStreamType.material,
                 //type:type,
                 subjectDescription: materialData['description'],
               )
@@ -120,10 +125,30 @@ class _SubjectViewState extends State<SubjectView> {
     }
   }
 
+  void forTeacher() async{
+    User? user = FirebaseAuth.instance.currentUser;
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(user?.uid)
+          .get();
+      Map<String, dynamic> userData =
+      userDoc.data() as Map<String, dynamic>;
+      userType = userData['type'];
+      setState(() {
+
+      });
+    } catch(ex) {
+      print('error{$ex}');
+    }
+  }
+
   void initState() {
     super.initState();
     _fetchStreams();
     _fetchAssignment();
+    forTeacher();
   }
 
   @override
@@ -143,6 +168,7 @@ class _SubjectViewState extends State<SubjectView> {
       AssignmentBody(assignments: allAssignment),
       const ClassmateBody()
     ];
+
 
     return SafeArea(
       child: Scaffold(
@@ -229,7 +255,28 @@ class _SubjectViewState extends State<SubjectView> {
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
+              userType=='teacher'? Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      fixedSize: Size.fromHeight(50),
+                      backgroundColor: AppColor.purpleGradientStart// Adjust the height as needed
+                  ),
+                  onPressed: () {
+                    // Navigate to the destination page when the button is pressed
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Attendance(subject: widget.subject)),
+                    );
+                  },
+                  child: Text(
+                    'Take Attendance',
+                    style: TextStyle(fontSize: 20,color: Colors.white),
+                  ),
+                ),
+              ):SizedBox(height: 0.5) ,
+              const SizedBox(height: 20),
               // Assignment highlight
               Row(
                 children: assignments

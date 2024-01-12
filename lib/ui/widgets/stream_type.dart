@@ -19,7 +19,7 @@ class StreamType extends StatelessWidget {
         borderRadius: BorderRadius.circular(360),
       ),
       child: Text(
-        type == SubjectStreamType.material ? "Material" : "Quiz",
+        type == SubjectStreamType.material ? "Material" : "Attendance",
         style: TextStyle(
           color: type == SubjectStreamType.material
               ? AppColor.material

@@ -26,7 +26,8 @@ class StreamItem extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => PostView(
                 postTitle: stream.title ?? 'Default Title',
-                postContent: stream.content ?? 'Default Content',
+                postContent: stream.subjectDescription ?? 'No Description',
+                postedAt: stream.postedAt,
               ), // Use the destination page widget
             ),
           );

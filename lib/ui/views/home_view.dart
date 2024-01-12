@@ -44,14 +44,19 @@ class _HomeViewState extends State<HomeView> {
       //print(u_id);
 
       //fetching from database
-      final result = await FirebaseFirestore.instance.collection('classroom')
+      final result1 = await FirebaseFirestore.instance.collection('classroom')
           .where('student', arrayContains: u_id).get();
+      final result2 = await FirebaseFirestore.instance.collection('classroom')
+          .where('teacher_id', isEqualTo: u_id).get();
+      Set<DocumentSnapshot<Map<String, dynamic>>> combinedResults = {};
+      combinedResults.addAll(result1.docs);
+      combinedResults.addAll(result2.docs);
 
       var c_name, teacher_id,cnt=1;
-      for (var queryDocumentSnapshot in result.docs) {
-        Map<String, dynamic> data = queryDocumentSnapshot.data();
-        c_name = data['class_name'];
-        teacher_id = data['teacher_id'];
+      for (var queryDocumentSnapshot in combinedResults) {
+        Map<String, dynamic>? data = queryDocumentSnapshot.data();
+        c_name = data?['class_name'];
+        teacher_id = data?['teacher_id'];
 
         //logic for finding teach name using id
         final ref_teacher = await FirebaseFirestore.instance.collection('users').doc(teacher_id).get();

@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 class PostView extends StatelessWidget {
   final String postTitle;
   final String postContent;
+  final DateTime postedAt;
 
   // Example list of comments
   final List<String> comments = [
@@ -19,6 +20,7 @@ class PostView extends StatelessWidget {
     Key? key,
     required this.postTitle,
     required this.postContent,
+    required this.postedAt,
   }) : super(key: key);
 
   @override
@@ -63,7 +65,7 @@ class PostView extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Posted at [timestamp]', // Replace with actual timestamp
+                      postedAt.toString(), // Replace with actual timestamp
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
@@ -99,6 +101,7 @@ class PostView extends StatelessWidget {
                       fontSize: 16,
                       color: Colors.white,
                     ),
+                    textAlign: TextAlign.justify,
                   ),
                 ],
               ),

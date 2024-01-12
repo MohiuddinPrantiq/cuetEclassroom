@@ -1,15 +1,40 @@
+import 'package:cuet/ui/views/subject_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'data/model/material_post.dart';
+import 'data/model/subject.dart';
 
 class Attendance extends StatefulWidget {
+  final Subject subject;
+  Attendance({Key? key, required this.subject}) : super(key: key);
   @override
   _AttendanceState createState() => _AttendanceState();
 }
+
+String? sub_id;
 
 class _AttendanceState extends State<Attendance> {
   List<bool> buttonStates = List.generate(200, (index) => false);
 
   @override
+  Future<void> get_sub() async {
+    try {
+
+      //logic for finding class_id using name
+      final ref_class = await FirebaseFirestore.instance.collection('classroom')
+          .where('class_name', isEqualTo: widget.subject.name).limit(1).get();
+      sub_id = ref_class.docs.first.id;
+
+    } catch (error) {
+      print('Error fetching enrolled classes: $error');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    get_sub();
     return Scaffold(
       backgroundColor: Color.fromRGBO(19, 24, 32, 1),
       appBar: AppBar(
@@ -87,7 +112,8 @@ class _AttendanceState extends State<Attendance> {
             child: ElevatedButton(
               onPressed: () {
                 // Handle data submission logic here
-                submitButtonStates();
+                submitButtonStates(context);
+
               },
               style: ElevatedButton.styleFrom(
                 primary: Color.fromRGBO(143, 148, 251, 1),
@@ -116,8 +142,90 @@ class _AttendanceState extends State<Attendance> {
     );
   }
 
-  void submitButtonStates() {
+  Future<void> submitButtonStates(BuildContext context) async{
     // Add logic to submit buttonStates
     print("Submitting buttonStates: $buttonStates");
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text('Confirmation',style: TextStyle(color: Colors.white),),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure to proceed?',style: TextStyle(color: Colors.white),),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel',style: TextStyle(color: Colors.white),),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('Confirm',style: TextStyle(color: Colors.white),),
+              onPressed: () async{
+                // Add your confirm logic here
+                String presentString = '';
+                String absentString = '';
+                for (int i = 0; i < buttonStates.length; i++) {
+                  if (buttonStates[i]) {
+                    // Student is present, add their ID to the presentString
+                    presentString += '$i ';
+                  } else {
+                    // Student is absent, add their ID to the absentString
+                    absentString += '$i ';
+                  }
+                }
+                String todayAttendance = 'Present : $presentString\n\nAbsent : $absentString';
+
+                MaterialPost post = MaterialPost(
+                    id: 1,
+                    title: "Today's Attendence",
+                    description: todayAttendance,
+                    postedAt: DateTime.now(),
+                    subjectId: sub_id!
+                );
+                print(sub_id);
+
+                //adding in material collection
+                CollectionReference materialdb = FirebaseFirestore.instance.collection('Material');
+                DocumentReference doc_ref = await materialdb.add({
+                  "title" : post.title,
+                  "description" : post.description,
+                  "posted" :  post.postedAt,
+                  "subject" : post.subjectId,
+                });
+                List updated_post = [];
+                updated_post.add(doc_ref.id);
+
+                //updating in database
+                try {
+                  var refdb = await FirebaseFirestore.instance.collection('classroom');
+                  await refdb.doc(sub_id).update({
+                    'material' : FieldValue.arrayUnion(updated_post),
+                  });
+                  print('added successfully');
+                } on FirebaseAuthException catch (ex){
+                  print(ex.code.toString());
+                }
+
+                Navigator.of(context).pop();// Close the dialog
+                Navigator.pop(context);// Close the Attendence
+                Navigator.pop(context);//// Close the streamPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SubjectView(subject: widget.subject,)),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
