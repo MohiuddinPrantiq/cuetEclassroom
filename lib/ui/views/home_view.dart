@@ -68,11 +68,12 @@ class _HomeViewState extends State<HomeView> {
       combinedResults.addAll(result2.docs);
 
       var c_name, teacher_id,cnt=1;
+      int totalStd;
       for (var queryDocumentSnapshot in combinedResults) {
         Map<String, dynamic>? data = queryDocumentSnapshot.data();
         c_name = data?['class_name'];
         teacher_id = data?['teacher_id'];
-
+        totalStd = data?['NoStudents'];
         //logic for finding teach name using id
         final ref_teacher = await FirebaseFirestore.instance.collection('users').doc(teacher_id).get();
         Map<String, dynamic> teacher = ref_teacher.data()!;
@@ -88,7 +89,8 @@ class _HomeViewState extends State<HomeView> {
                 lecturer: teacher_name,
                 image: "assets/images/digital_arts.png",
                 gradient: [AppColor.purpleGradientStart,
-                  AppColor.purpleGradientEnd]
+                  AppColor.purpleGradientEnd],
+              totalStudent: totalStd,
             )
         );
         cnt++;

@@ -8,7 +8,8 @@ import 'data/model/subject.dart';
 
 class Attendance extends StatefulWidget {
   final Subject subject;
-  Attendance({Key? key, required this.subject}) : super(key: key);
+  int totalStd;
+  Attendance({Key? key, required this.subject,required this.totalStd}) : super(key: key);
   @override
   _AttendanceState createState() => _AttendanceState();
 }
@@ -17,7 +18,13 @@ String? sub_id;
 String? posterName;
 
 class _AttendanceState extends State<Attendance> {
-  List<bool> buttonStates = List.generate(200, (index) => false);
+  late List<bool> buttonStates;
+
+  @override
+  void initState() {
+    super.initState();
+    buttonStates = List.generate(widget.totalStd, (index) => false);
+  }
 
   @override
   Future<void> get_sub() async {
@@ -183,8 +190,8 @@ class _AttendanceState extends State<Attendance> {
                 // Add your confirm logic here
                 String presentString = '';
                 String absentString = '';
-                for (int i = 0; i < buttonStates.length; i++) {
-                  if (buttonStates[i]) {
+                for (int i = 1; i <= buttonStates.length; i++) {
+                  if (buttonStates[i-1]) {
                     // Student is present, add their ID to the presentString
                     presentString += '$i ';
                   } else {

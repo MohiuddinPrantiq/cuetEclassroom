@@ -262,7 +262,7 @@ class _SubjectViewState extends State<SubjectView> {
                     // Navigate to the destination page when the button is pressed
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Attendance(subject: widget.subject)),
+                      MaterialPageRoute(builder: (context) => Attendance(subject: widget.subject,totalStd:widget.subject.totalStudent)),
                     );
                   },
                   child: Text(

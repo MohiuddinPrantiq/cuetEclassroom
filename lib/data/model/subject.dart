@@ -8,6 +8,7 @@ class Subject {
   final String lecturer;
   final String image;
   final List<Color> gradient;
+  final int totalStudent;
 
   Subject({
     required this.id,
@@ -17,5 +18,6 @@ class Subject {
     required this.lecturer,
     required this.image,
     required this.gradient,
+    required this.totalStudent,
   });
 }
