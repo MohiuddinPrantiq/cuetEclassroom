@@ -1,46 +1,54 @@
 import 'package:flutter/material.dart';
+import '../../announcement_page.dart';
+import '../../data/model/subject.dart';
 import '../theme/app_color.dart';
 
 class SubjectPost extends StatelessWidget {
-  const SubjectPost({Key? key}) : super(key: key);
+
+  final Subject subject;
+
+  const SubjectPost({Key? key, required this.subject}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(360),
-            child: Image.asset(
-              "assets/images/user.png",
-              width: 36,
-              height: 36,
-            ),
+    return InkWell(
+        onTap:(){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Announcement_page(subject: subject,)),
+          );
+        },
+        child:Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColor.dark, width: 1.3),
+            borderRadius: BorderRadius.circular(8),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: TextField(
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              style: const TextStyle(
-                color: AppColor.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-              decoration: InputDecoration(
-                hintText: "Share something with your class",
-                hintStyle: TextStyle(
-                  color: AppColor.grey.withOpacity(0.5),
-                  fontSize: 12,
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(360),
+                child: Image.asset(
+                  "assets/images/user.png",
+                  width: 36,
+                  height: 36,
                 ),
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
               ),
-            ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  "Share something with your class",
+                  style: TextStyle(
+                    color: AppColor.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        )
     );
   }
 }

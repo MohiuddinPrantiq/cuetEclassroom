@@ -29,6 +29,8 @@ class SubjectView extends StatefulWidget {
   State<SubjectView> createState() => _SubjectViewState();
 }
 
+Subject? currentSubject;
+
 class _SubjectViewState extends State<SubjectView> {
   int _activeIndex = 0;
 
@@ -41,6 +43,7 @@ class _SubjectViewState extends State<SubjectView> {
   Future<void> _fetchStreams() async {
     try {
       List<SubjectStream> streamsData = [];
+      currentSubject=widget.subject;
       print(widget.subject.name);
       //fetching from database
       final ref_class = await FirebaseFirestore.instance.collection('classroom')
@@ -173,16 +176,7 @@ class _SubjectViewState extends State<SubjectView> {
 
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Announcement_page(subject: widget.subject,)),
-            );
-          },
-          tooltip: 'Create Post',
-          child: Icon(Icons.add),
-        ),
+
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -368,7 +362,7 @@ class StreamBody extends StatelessWidget {
     return Column(
 
       children: [
-        const SubjectPost(),
+        SubjectPost(subject: currentSubject!),
         const SizedBox(height: 16),
         Expanded(
           child: ListView.builder(
@@ -396,7 +390,7 @@ class AssignmentBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SubjectPost(),
+        SubjectPost(subject: currentSubject!),
         const SizedBox(height: 16),
         Expanded(
           child: ListView.builder(

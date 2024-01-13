@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cuet/data/model/notification.dart';
 import 'package:cuet/data/model/subject_assignment.dart';
 import 'package:cuet/data/model/material_post.dart';
+import 'package:cuet/ui/theme/app_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -68,6 +69,7 @@ class _MyFormState extends State<Announcement_page> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
           'Create Post',
           style: TextStyle(
@@ -79,7 +81,7 @@ class _MyFormState extends State<Announcement_page> {
         elevation: 10,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              color: Color.fromRGBO(36, 110, 233, 1)
+              color: AppColor.purpleGradientStart
           ),
         ),
       ),
@@ -206,7 +208,7 @@ class _MyFormState extends State<Announcement_page> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           fixedSize: Size.fromHeight(50),
-                          backgroundColor: Color.fromRGBO(36, 110, 233, 1)// Adjust the height as needed
+                          backgroundColor: AppColor.purpleGradientStart// Adjust the height as needed
                       ),
                       onPressed: _selectFiles,
                       child: Text(
@@ -226,7 +228,7 @@ class _MyFormState extends State<Announcement_page> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           fixedSize: Size.fromHeight(50),
-                          backgroundColor: Color.fromRGBO(36, 110, 233, 1)// Adjust the height as needed
+                          backgroundColor: AppColor.purpleGradientStart// Adjust the height as needed
                       ),
                       onPressed: _submitForm,
                       child: Text(

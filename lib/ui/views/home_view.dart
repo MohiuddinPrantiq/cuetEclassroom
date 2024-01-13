@@ -34,6 +34,7 @@ class _HomeViewState extends State<HomeView> {
   final classcodeController=TextEditingController();
   final joinclassController=TextEditingController();
 
+  TextEditingController totalStdcontroller = TextEditingController();
 
   List<Subject> enrolledClasses = [];
 
@@ -124,18 +125,14 @@ class _HomeViewState extends State<HomeView> {
           curve: Curves.bounceIn,
           overlayColor: Colors.black,
           overlayOpacity: 0.5,
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor,
+          backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 8.0,
           shape: CircleBorder(),
           children: [
             SpeedDialChild(
               child: Icon(Icons.add),
-              backgroundColor: Theme
-                  .of(context)
-                  .primaryColor,
+              backgroundColor: Colors.white,
               label: 'Join Class',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () {
@@ -144,9 +141,7 @@ class _HomeViewState extends State<HomeView> {
             ),
             SpeedDialChild(
               child: Icon(Icons.add),
-              backgroundColor: Theme
-                  .of(context)
-                  .primaryColor,
+              backgroundColor: Colors.white,
               label: 'Create Class',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () {
@@ -673,6 +668,46 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   const SizedBox(height: 32),
                   const Text(
+                    "Nummber of Students",
+                    style: TextStyle(
+                      color: AppColor.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: totalStdcontroller,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                    style: const TextStyle(
+                      color: AppColor.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: "Enter total number of students",
+                      hintStyle: TextStyle(
+                        color: AppColor.grey.withOpacity(0.75),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: AppColor.dark,
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  const Text(
                     "Class Code",
                     style: TextStyle(
                       color: AppColor.white,
@@ -761,6 +796,7 @@ class _HomeViewState extends State<HomeView> {
                         'class_code': classcodeController.text,
                         'student':[],
                         'teacher_id':u_id,
+                        'NoStudents' : int.tryParse(totalStdcontroller.text),
                       });
                       Navigator.of(context).pop();
                     },
