@@ -47,6 +47,15 @@ dependencies:
   firebase_auth: ^4.15.3
   cloud_firestore: ^4.13.6
   flutter_speed_dial: ^6.2.0
+  flutter_native_splash: ^2.3.9
+
+flutter_native_splash:
+  android : true
+  ios : true
+  web : true
+  color : "#000000"
+  image : "assets/images/cec_splash.png"
+
 
 dev_dependencies:
   flutter_test:

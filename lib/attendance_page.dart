@@ -23,7 +23,7 @@ class _AttendanceState extends State<Attendance> {
   @override
   void initState() {
     super.initState();
-    buttonStates = List.generate(widget.totalStd, (index) => false);
+    buttonStates = List.generate(widget.totalStd, (index) => true);
   }
 
   @override
@@ -96,7 +96,7 @@ class _AttendanceState extends State<Attendance> {
                 itemBuilder: (context, index) {
                   int buttonValue = index + 1;
                   Color buttonColor =
-                  buttonStates[index] ? Colors.red : Colors.green;
+                  buttonStates[index] ? Colors.green : Colors.red;
 
                   return InkWell(
                     onTap: () {

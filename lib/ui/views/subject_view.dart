@@ -74,7 +74,7 @@ class _SubjectViewState extends State<SubjectView> {
         }
       }
       setState(() {
-        allStreamList = streamsData;
+        allStreamList = streamsData.reversed.toList();
       });
       //allStreamList=streamsData;
       print('yes-found');

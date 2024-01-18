@@ -27,6 +27,7 @@ class HomeView extends StatefulWidget{
 
 String currName='none';
 String currEmail='none';
+String userType='none';
 
 class _HomeViewState extends State<HomeView> {
   List search_result = [];
@@ -56,6 +57,7 @@ class _HomeViewState extends State<HomeView> {
       userDoc.data() as Map<String, dynamic>;
       currEmail=userData['email'];
       currName=userData['name'];
+      userType=userData['type'];
 
       //fetching from database
 
@@ -131,7 +133,27 @@ class _HomeViewState extends State<HomeView> {
           foregroundColor: Colors.black,
           elevation: 8.0,
           shape: CircleBorder(),
-          children: [
+          children: userType=='teacher'?
+          [
+          SpeedDialChild(
+            child: Icon(Icons.add),
+            backgroundColor: Colors.white,
+            label: 'Join Class',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () {
+              _showJoinClassModal(context);
+            },
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.add),
+            backgroundColor: Colors.white,
+            label: 'Create Class',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () {
+              _showCreateClassModal(context);
+            },
+          ),
+          ]:[
             SpeedDialChild(
               child: Icon(Icons.add),
               backgroundColor: Colors.white,
@@ -141,16 +163,7 @@ class _HomeViewState extends State<HomeView> {
                 _showJoinClassModal(context);
               },
             ),
-            SpeedDialChild(
-              child: Icon(Icons.add),
-              backgroundColor: Colors.white,
-              label: 'Create Class',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () {
-                _showCreateClassModal(context);
-              },
-            ),
-          ],
+          ]
         ),
         body: Padding(
           padding: const EdgeInsets.all(24),
