@@ -683,7 +683,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   const SizedBox(height: 32),
                   const Text(
-                    "Nummber of Students",
+                    "Number of Students",
                     style: TextStyle(
                       color: AppColor.white,
                       fontWeight: FontWeight.w600,
@@ -806,12 +806,16 @@ class _HomeViewState extends State<HomeView> {
                       if(user?.uid!=null)u_id=user?.uid;
                       //print(u_id);
                       CollectionReference collRef=FirebaseFirestore.instance.collection("classroom");
+                      // Create a List<int> initialized with zeros for attendance
+                      List<int> initialAttendance = List.filled(int.tryParse(totalStdcontroller.text) ?? 0, 0);
+
                       collRef.add({
                         'class_name': classnameController.text,
                         'class_code': classcodeController.text,
                         'student':[],
                         'teacher_id':u_id,
                         'NoStudents' : int.tryParse(totalStdcontroller.text),
+                        'attendance': initialAttendance,
                       });
                       Navigator.of(context).pop();
                     },

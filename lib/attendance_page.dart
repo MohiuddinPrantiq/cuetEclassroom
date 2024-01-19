@@ -125,36 +125,33 @@ class _AttendanceState extends State<Attendance> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Handle data submission logic here
-                submitButtonStates(context);
-
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Color.fromRGBO(143, 148, 251, 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: Container(
-                height: 50,
-                child: Center(
-                  child: Text(
-                    "Proceed",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
           SizedBox(height: 10),
+
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0, // Set the initial index as needed
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        backgroundColor: Color.fromRGBO(143, 148, 251, 1),
+        onTap: (index) {
+          // Handle navigation to other pages
+          if (index == 0) {
+            submitButtonStates(context);
+          } else if (index == 1) {
+            // Handle Generate Mark logic here
+            generateMark(context);
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Get Attendance',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Generate Mark',
+          ),
         ],
       ),
     );
@@ -173,7 +170,7 @@ class _AttendanceState extends State<Attendance> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure to proceed?',style: TextStyle(color: Colors.white),),
+                Text('Are you sure to get attendance?',style: TextStyle(color: Colors.white),),
               ],
             ),
           ),
@@ -226,6 +223,106 @@ class _AttendanceState extends State<Attendance> {
                 //updating in database
                 try {
                   var refdb = await FirebaseFirestore.instance.collection('classroom');
+                  DocumentSnapshot classSnapshot = await refdb.doc(sub_id).get();
+                  var attendanceArray = classSnapshot['attendance'] as List<dynamic>;
+                  var total_class = classSnapshot['tot_class'] as int;
+                  total_class = total_class + 1;
+                  for (int i = 1; i <= buttonStates.length; i++) {
+                    if (buttonStates[i-1]) {
+                      // Increment the attendance value for present students
+                      attendanceArray[i-1] = attendanceArray[i-1] + 1;
+                    }
+                  }
+
+                  await refdb.doc(sub_id).update({
+                    'material' : FieldValue.arrayUnion(updated_post),
+                    'attendance': attendanceArray,
+                    'tot_class' : total_class
+                  });
+                  print('added successfully');
+                } on FirebaseAuthException catch (ex){
+                  print(ex.code.toString());
+                }
+
+                Navigator.of(context).pop();// Close the dialog
+                Navigator.pop(context);// Close the Attendence
+                Navigator.pop(context);//// Close the streamPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SubjectView(subject: widget.subject,)),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> generateMark(BuildContext context) async{
+    print("Submitting buttonStates: $buttonStates");
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text('Confirmation',style: TextStyle(color: Colors.white),),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure to generate attendance mark?',style: TextStyle(color: Colors.white),),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel',style: TextStyle(color: Colors.white),),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('Confirm',style: TextStyle(color: Colors.white),),
+              onPressed: () async{
+                // Add your confirm logic here
+                try {
+                  var refdb = await FirebaseFirestore.instance.collection('classroom');
+                  DocumentSnapshot classSnapshot = await refdb.doc(sub_id).get();
+                  var attendanceArray = classSnapshot['attendance'] as List<dynamic>;
+                  var total_class = classSnapshot['tot_class'] as int;
+
+                  String todayAttendance = 'ID'.padLeft(6) + '     :     ' + 'Marks\n';
+
+                  for (int i = 1; i <= attendanceArray.length; i++) {
+                    int x = ((attendanceArray[i - 1] / total_class) * 30).round();
+                    todayAttendance += '$i'.padLeft(6) + '     :     ' + x.toString();
+                    if (i < attendanceArray.length) {
+                      // Add a new line after each element except the last one
+                      todayAttendance += '\n';
+                    }
+                  }
+                  MaterialPost post = MaterialPost(
+                    id: 1,
+                    title: "Attendence Marks",
+                    description: todayAttendance,
+                    postedAt: DateTime.now(),
+                    subjectId: sub_id!,
+                    postedBy: posterName!,
+                  );
+                  print(sub_id);
+
+                  //adding in material collection
+                  CollectionReference materialdb = FirebaseFirestore.instance.collection('Material');
+                  DocumentReference doc_ref = await materialdb.add({
+                    "title" : post.title,
+                    "description" : post.description,
+                    "posted" :  post.postedAt,
+                    "subject" : post.subjectId,
+                    "postedBy" : post.postedBy,
+                  });
+                  List updated_post = [];
+                  updated_post.add(doc_ref.id);
+
                   await refdb.doc(sub_id).update({
                     'material' : FieldValue.arrayUnion(updated_post),
                   });
