@@ -13,14 +13,62 @@ class ProfilePage extends StatefulWidget{
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+List<Color> showColor = [
+  Colors.yellow,
+  Colors.lightBlue,
+  Colors.orange,
+  Colors.green,
+  Colors.red,
+  Colors.teal,
+  Colors.purple,
+  Colors.blue,
+];
 
+class _ProfilePageState extends State<ProfilePage> {
+  late List<double> CGPA=[];
   late Map<String, dynamic> profileData;
+  @override
+  void fetchCPGA() async{
+    try{
+      String lastThreeDigits = widget.userData['sid'].substring(widget.userData['sid'].length - 3);
+      print(lastThreeDigits);
+      int roll=int.parse(lastThreeDigits);
+      print(roll);
+      final user=FirebaseAuth.instance.currentUser;
+      final result1 = await FirebaseFirestore.instance.collection('classroom')
+          .where('student', arrayContains: user?.uid)
+          .where('head',isEqualTo: 'head').get();
+      if(result1.docs.isNotEmpty){
+        List<dynamic> existingCgpaList = result1.docs[0]['cgpa'] ?? [];
+        print(existingCgpaList);
+
+        for (Map<String, dynamic> cgpaMap in existingCgpaList) {
+          // Iterate through the values (lists) of each map
+          cgpaMap.forEach((key, value) {
+            if (value is List<dynamic>) {
+              CGPA.add(value[roll-1].toDouble());
+            }
+          });
+        }
+        setState(() {
+
+        });
+        print(CGPA);
+      }
+      else{
+        print('no cgpa found');
+      }
+    } catch (error) {
+      print('Error fetching enrolled classes: $error');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    fetchCPGA();
     profileData = widget.userData;
+
   }
 
   @override
@@ -157,25 +205,96 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ) : SizedBox(height: 0.1),
+
               SizedBox(height: 10),
-              profileData["type"] == "student" ? Padding(
+              profileData["type"] == "student"
+                  ? Padding(
                 padding: EdgeInsets.all(10),
-                child:Container(
+                child: Container(
                   width: double.infinity,
                   height: 350,
+                  padding: EdgeInsets.all(16), // Adjust padding as needed
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Color.fromRGBO(143, 148, 251, .2),
-                            blurRadius: 20.0,
-                            offset: Offset(0, 10)
-                        )
-                      ]
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Color.fromRGBO(143, 148, 251, 1)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromRGBO(143, 148, 251, .2),
+                        blurRadius: 20.0,
+                        offset: Offset(0, 10),
+                      )
+                    ],
+                  ),
+                  child: BarChart(
+                    BarChartData(
+                      alignment: BarChartAlignment.spaceAround,
+                      maxY: 4, // Adjust based on your data
+                      barGroups: List.generate(
+                        CGPA.length,
+                            (index) => BarChartGroupData(
+                          x: index,
+                          barRods: [
+                            BarChartRodData(
+                              toY: CGPA[index],
+                              width: 20, // Adjust the width of the bars as needed
+                              color: showColor[index],
+                              rodStackItems: [
+                                BarChartRodStackItem(
+                                  0,
+                                  CGPA[index],
+                                  showColor[index],
+                                ),
+                              ],
+                            ),
+
+                          ],
+                              showingTooltipIndicators: [0]
+                        ),
+                      ),
+                      titlesData: FlTitlesData(
+                        rightTitles:  AxisTitles(
+
+                          sideTitles: SideTitles(showTitles: false,),
+                        ),
+
+                        topTitles: AxisTitles(
+
+                          sideTitles: SideTitles(showTitles: false,),
+                        ),
+
+                        bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                                getTitlesWidget: (data, value) {
+                                  return Text(
+                                    'L${((data+2)/2).toInt()}T${data%2==0?1:2}',
+                                    style: const TextStyle(color: Colors.white,
+                                        fontSize: 9, fontWeight: FontWeight.w500),
+                                  );
+                                },
+                                showTitles: true,
+                                reservedSize: 30)),
+                        leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                                getTitlesWidget: (data, value) {
+                                  return Text(
+                                    data.toString(),
+                                    style: const TextStyle( color: Colors.white,
+                                        fontSize: 9, fontWeight: FontWeight.w500),
+                                  );
+                                },
+                                showTitles: true,
+                                reservedSize: 30)),
+
+                      ),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border(bottom: BorderSide(color: Colors.white),left: BorderSide(color: Colors.white)),
+                      ),
+                    ),
                   ),
                 ),
-              ) : SizedBox(height: 0.1),
+              )
+                  : SizedBox(height: 0.1),
               SizedBox(height: 15),
 
               Padding(

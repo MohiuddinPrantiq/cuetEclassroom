@@ -1,3 +1,4 @@
+import 'package:cuet/cgpa_page.dart';
 import 'package:cuet/data/home_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,6 +39,7 @@ class _SubjectViewState extends State<SubjectView> {
   List<SubjectStream> allStreamList = [];
   List<SubjectAssignment> allAssignment = [];
   String userType='student';
+  String isHead='abcd';
 
   @override
   Future<void> _fetchStreams() async {
@@ -46,9 +48,24 @@ class _SubjectViewState extends State<SubjectView> {
       currentSubject=widget.subject;
       print(widget.subject.name);
       //fetching from database
-      final ref_class = await FirebaseFirestore.instance.collection('classroom')
-          .where('class_name', isEqualTo: widget.subject.name).limit(1).get();
-      List<dynamic> materials = ref_class.docs[0]['material'] as List<dynamic>;
+      final user=FirebaseAuth.instance.currentUser;
+
+
+
+
+      QuerySnapshot result1 = await FirebaseFirestore.instance.collection('classroom')
+          .where('class_name', isEqualTo: widget.subject.name)
+          .where('student', arrayContains: user!.uid).limit(1).get();
+      QuerySnapshot result2 = await FirebaseFirestore.instance.collection('classroom')
+          .where('class_name', isEqualTo: widget.subject.name)
+          .where('teacher_id', isEqualTo: user!.uid).limit(1).get();
+
+      List<DocumentSnapshot> ref_class = [
+        ...result1.docs,
+        ...result2.docs,
+      ];
+      print(ref_class);
+      List<dynamic> materials = ref_class[0]['material'] as List<dynamic>;
       for (String materialId in materials) {
         DocumentSnapshot<Map<String, dynamic>> materialSnapshot =
         await FirebaseFirestore.instance.collection('Material')
@@ -74,7 +91,8 @@ class _SubjectViewState extends State<SubjectView> {
         }
       }
       setState(() {
-        allStreamList = streamsData.reversed.toList();
+        streamsData.sort((a, b) => b.postedAt.compareTo(a.postedAt));
+        allStreamList = streamsData;
       });
       //allStreamList=streamsData;
       print('yes-found');
@@ -140,9 +158,13 @@ class _SubjectViewState extends State<SubjectView> {
       Map<String, dynamic> userData =
       userDoc.data() as Map<String, dynamic>;
       userType = userData['type'];
+      String head = userData['email'];
+      isHead = head.substring(0, 4);
       setState(() {
 
       });
+      print(userType);
+      print(isHead);
     } catch(ex) {
       print('error{$ex}');
     }
@@ -260,13 +282,17 @@ class _SubjectViewState extends State<SubjectView> {
                   ),
                   onPressed: () {
                     // Navigate to the destination page when the button is pressed
-                    Navigator.push(
+                    isHead=='head'?Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CGPAPage(subject: widget.subject,totalStd:widget.subject.totalStudent)),
+                    ):Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Attendance(subject: widget.subject,totalStd:widget.subject.totalStudent)),
                     );
+
                   },
                   child: Text(
-                    'Take Attendance',
+                    isHead=='head'?'Post CGPA':'Take Attendance',
                     style: TextStyle(fontSize: 20,color: Colors.white),
                   ),
                 ),

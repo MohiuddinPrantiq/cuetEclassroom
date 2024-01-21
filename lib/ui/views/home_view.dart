@@ -603,7 +603,13 @@ class _HomeViewState extends State<HomeView> {
                       //close modal
 
                       _fetchEnrolledClasses();
+
                       Navigator.of(context).pop();
+                      Navigator.pop(context);//// Close the streamPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeView()),
+                      );
                     },
                   ),
                 ],
@@ -797,13 +803,23 @@ class _HomeViewState extends State<HomeView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async{
                       // Do something & close modal
                       //print(classnameController.text);
                       //print(classcodeController.text);
                       final user=FirebaseAuth.instance.currentUser;
                       String? u_id;
                       if(user?.uid!=null)u_id=user?.uid;
+                      DocumentSnapshot userDoc = await FirebaseFirestore
+                          .instance
+                          .collection('users')
+                          .doc(user?.uid)
+                          .get();
+                      Map<String, dynamic> userData =
+                      userDoc.data() as Map<String, dynamic>;
+                      userType = userData['type'];
+                      String head = userData['email'];
+                      String isHead = head.substring(0, 4);
                       //print(u_id);
                       CollectionReference collRef=FirebaseFirestore.instance.collection("classroom");
                       // Create a List<int> initialized with zeros for attendance
@@ -816,6 +832,7 @@ class _HomeViewState extends State<HomeView> {
                         'teacher_id':u_id,
                         'NoStudents' : int.tryParse(totalStdcontroller.text),
                         'attendance': initialAttendance,
+                        'head' : isHead=='head'?'head':'nothead',
                       });
                       Navigator.of(context).pop();
                     },
